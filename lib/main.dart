@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:galaxy_im/Helper/Helper.dart';
+import 'package:get/get.dart';
 
-void main() {
+import 'Helper/LocalizationService.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Helper.localizationService.init();
   runApp(const MyApp());
 }
 
@@ -10,28 +16,22 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    Get.put(Helper.localizationService);
+
+    return GetMaterialApp(
       title: 'Galaxy IM',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a blue toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Galaxy IM Home Page'),
+      home: GetBuilder<LocalizationService>(
+        builder: (controller) {
+          // 这里的builder函数会在参数变化时自动被调用
+          return Obx(() => MyHomePage(
+              title:
+                  '${Helper.localizationService.translate('galaxy')} IM Home Page'));
+        },
+      ),
     );
   }
 }
@@ -55,19 +55,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
@@ -105,20 +92,33 @@ class _MyHomePageState extends State<MyHomePage> {
           // wireframe for each widget.
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
+            Text(
+              Helper.localizationService.translate('titleIs'),
             ),
             Text(
-              '$_counter',
+              Helper.localizationService.translate('galaxy'),
               style: Theme.of(context).textTheme.headlineMedium,
             ),
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
+      floatingActionButton: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          ElevatedButton(
+            onPressed: () {
+              Helper.localizationService.setLocale('zh');
+            },
+            child: Text("中文"),
+          ),
+          const SizedBox(height: 10),
+          ElevatedButton(
+            onPressed: () {
+              Helper.localizationService.setLocale('en');
+            },
+            child: Text("English"),
+          ),
+        ],
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
