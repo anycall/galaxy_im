@@ -102,7 +102,6 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         ),
       ),
-      //右下角放两个按钮，一个button显示'中文'，一个button显示'English'
       floatingActionButton: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
