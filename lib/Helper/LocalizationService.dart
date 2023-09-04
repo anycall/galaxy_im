@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:ui';
 
 import 'package:flutter/services.dart';
+import 'package:galaxy_im/Helper/Helper.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -14,11 +15,10 @@ class LocalizationService extends GetxController {
 
   LocalizationService._internal();
 
-  final String defaultString = 'en';
-  late String _currentString;
-  var localizedStrings = <String, dynamic>{}.obs;
+  late var currentString = 'en'.obs;
+  var localizedStrings = <String, Map<String, String>>{}.obs;
 
-  String get currentLocale => _currentString;
+  Locale get currentLocale => Locale(currentString.value);
 
   Future<void> init() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -26,18 +26,13 @@ class LocalizationService extends GetxController {
     String systemLocale = PlatformDispatcher.instance.locale.languageCode;
 
     if (savedLocale != null) {
-      _currentString = savedLocale;
+      currentString.value = savedLocale;
+    } else if (systemLocale == 'zh' || systemLocale == 'en') {
+      currentString.value = systemLocale;
     }
-    else if (systemLocale == 'zh' || systemLocale == 'en') {
-      _currentString = systemLocale;
-    }
-    else {
-      _currentString = defaultString;
-    }
-    await loadJsonLocale(_currentString); 
-    // Intl.defaultLocale = _currentString;
+    await loadJsonLocale(currentString.value);
+    // Intl.defaultLocale = currentString;
   }
-
 
   Future<void> loadJsonLocale(String locale) async {
     final String fileName = 'assets/l10n/$locale.json';
@@ -46,26 +41,34 @@ class LocalizationService extends GetxController {
     try {
       final jsonString = await rootBundle.loadString(fileName);
       final jsonMap = json.decode(jsonString);
-      localizedStrings.value = jsonMap;
+      Map<String, String> stringMap = Map<String, String>.from(jsonMap.map(
+          (key, value) => MapEntry<String, String>(key, value.toString())));
+      localizedStrings.clear();
+      localizedStrings[locale] = stringMap;
+      Get.clearTranslations();
+      Get.addTranslations(localizedStrings);
     } catch (e) {
       // 如果加载或解析失败，可以添加适当的错误处理，在这里可以设置默认的本地化文本或采取其他措施
     }
   }
 
-  String translate(String key) {
-    if (localizedStrings[key] == null) {
-      // 在未找到翻译时，返回一个默认的占位文本或采取其他措施
-      return 'Translation not found for $key';
-    }
-    return localizedStrings[key];
-  }
-
   Future<void> setLocale(String locale) async {
-    _currentString = locale;
-    await loadJsonLocale(_currentString); 
-    // Intl.defaultLocale = _currentString;
+    if (currentString.value == locale) {
+      return;
+    }
+
+    currentString.value = locale;
+    await loadJsonLocale(currentString.value);
+    // Intl.defaultLocale = currentString;
 
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString('locale', _currentString);
+    await prefs.setString('locale', currentString.value);
+  }
+}
+
+class LocationService extends Translations {
+  @override
+  Map<String, Map<String, String>> get keys {
+    return Helper.localizationService.localizedStrings;
   }
 }
