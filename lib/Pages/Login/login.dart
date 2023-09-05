@@ -23,7 +23,7 @@ class _LoginPageState extends State<LoginPage> {
           children: <Widget>[
             ElevatedButton(
             onPressed: () async {
-              Get.toNamed(Routes.login);
+              Get.toNamed(Routes.login, preventDuplicates: false);
             },
             child: Text("下一页"),
           ),

@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
       title: 'Galaxy IM',
       theme: ThemeData(
         colorScheme: ColorScheme.dark(),
-        useMaterial3: false,
+        useMaterial3: true,
       ),
       initialRoute: Routes.initial,
       getPages: AppPages.pages,
