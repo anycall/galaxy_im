@@ -39,6 +39,8 @@ dependencies:
   shared_preferences: ^2.2.1
   get: ^4.6.5
   flutter_launcher_icons: ^0.13.1
+  flutter_native_splash: ^2.3.2
+  flutter_screenutil: ^5.9.0
 
 dev_dependencies:
   flutter_test:
@@ -64,6 +66,12 @@ flutter_launcher_icons:
   macos:
     generate: true
     image_path: "assets/icon/icon.png"
+
+flutter_native_splash:
+  color: "#F2F2F2"
+  image: assets/icon/splash.jpg
+  android_gravity: center
+  ios_content_mode: center
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
