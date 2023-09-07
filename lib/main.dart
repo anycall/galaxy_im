@@ -30,6 +30,9 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           colorScheme: ColorScheme.light(),
           useMaterial3: true,
+          splashColor: Colors.transparent,
+          highlightColor: Colors.transparent,
+          hoverColor: Colors.transparent,
         ),
         debugShowCheckedModeBanner: false,
         initialRoute: Routes.initial,

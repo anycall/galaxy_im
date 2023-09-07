@@ -41,6 +41,8 @@ dependencies:
   flutter_launcher_icons: ^0.13.1
   flutter_native_splash: ^2.3.2
   flutter_screenutil: ^5.9.0
+  animations: ^2.0.8
+  badges: ^3.1.2
 
 dev_dependencies:
   flutter_test:

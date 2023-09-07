@@ -1,5 +1,7 @@
 {
     "hello": "Hello",
     "galaxy": "Galaxy",
-    "titleIs": "Title is :"
+    "contacts": "Contacts",
+    "me": "Me",
+    "chats": "Chats"
 }
