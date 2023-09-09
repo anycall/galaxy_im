@@ -5,18 +5,26 @@
 import 'dart:io';
 
 abstract class IClientInterface {
-  String server;
-  int port;
+  BaseServerInfo serverInfo;
 
-  IClientInterface(this.server, this.port);
+  IClientInterface(this.serverInfo);
 
-  Future<void> connect(BaseLoginInfo);
   Future<void> disconnect();
   Future<void> reconnect();
   Future<void> receiveMessage();
   Future<void> sendMessage(String message);
-  Future<void> login();
+  Future<bool> login(BaseLoginInfo info);
   Future<void> logout();
+}
+
+class BaseServerInfo {
+  String server;
+  int port;
+  BaseServerInfo(this.server, this.port);
+}
+
+class XmppServerInfo extends BaseServerInfo {
+  XmppServerInfo(String server, int port) : super(server, port);
 }
 
 //基础的登录信息，用于占位的基类，不同的协议，需要继承本类，实现自己的登录信息传入
