@@ -6,6 +6,7 @@ import 'dart:io';
 
 abstract class IClientInterface {
   BaseServerInfo serverInfo;
+  RawMessageOutput get rawOutput => serverInfo.rawOutput!;
 
   IClientInterface(this.serverInfo);
 
@@ -17,14 +18,19 @@ abstract class IClientInterface {
   Future<void> logout();
 }
 
+typedef RawMessageOutput = void Function(String message,
+    {String prefix, String suffix});
+
 class BaseServerInfo {
   String server;
   int port;
-  BaseServerInfo(this.server, this.port);
+  RawMessageOutput? rawOutput;
+  BaseServerInfo(this.server, this.port, this.rawOutput);
 }
 
 class XmppServerInfo extends BaseServerInfo {
-  XmppServerInfo(String server, int port) : super(server, port);
+  XmppServerInfo(String server, int port, RawMessageOutput? outputHandler)
+      : super(server, port, outputHandler);
 }
 
 //基础的登录信息，用于占位的基类，不同的协议，需要继承本类，实现自己的登录信息传入
@@ -35,5 +41,7 @@ class BaseLoginInfo {
 }
 
 class XmppLoginInfo extends BaseLoginInfo {
-  XmppLoginInfo(String userName, String password) : super(userName, password);
+  String domain;
+  XmppLoginInfo(String userName, String password, this.domain)
+      : super(userName, password);
 }

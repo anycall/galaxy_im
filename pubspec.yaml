@@ -43,6 +43,8 @@ dependencies:
   flutter_screenutil: ^5.9.0
   animations: ^2.0.8
   badges: ^3.1.2
+  logger: ^2.0.2
+  uuid: ^4.0.0
 
 dev_dependencies:
   flutter_test:
