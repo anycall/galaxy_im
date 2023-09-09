@@ -38,6 +38,11 @@ dependencies:
   intl: ^0.18.1
   shared_preferences: ^2.2.1
   get: ^4.6.5
+  flutter_launcher_icons: ^0.13.1
+  flutter_native_splash: ^2.3.2
+  flutter_screenutil: ^5.9.0
+  animations: ^2.0.8
+  badges: ^3.1.2
 
 dev_dependencies:
   flutter_test:
@@ -50,6 +55,26 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
 
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/icon/icon.png"
+  adaptive_icon_foreground: "assets/icon/icon.png"
+  min_sdk_android: 21 # android min sdk min:16, default 21
+  windows:
+    generate: true
+    image_path: "assets/icon/icon.png"
+    icon_size: 48 # min:48, max:256, default: 48
+  macos:
+    generate: true
+    image_path: "assets/icon/icon.png"
+
+flutter_native_splash:
+  color: "#F2F2F2"
+  image: assets/icon/splash.jpg
+  android_gravity: center
+  ios_content_mode: center
+
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 # The following section is specific to Flutter packages.
@@ -61,6 +86,7 @@ flutter:
   uses-material-design: true
   assets:
     - assets/l10n/
+    - assets/icon/
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
   # For details regarding adding assets from package dependencies, see

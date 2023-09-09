@@ -17,19 +17,16 @@ class _LoginPageState extends State<LoginPage> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text('galaxy'.tr),
       ),
+
+
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            ElevatedButton(
-            onPressed: () async {
-              Get.toNamed(Routes.login, preventDuplicates: false);
-            },
-            child: Text("下一页"),
-          ),
+
           ElevatedButton(
             onPressed: () {
-              Get.toNamed(Routes.home);
+              Get.offNamed(Routes.home);
             },
             child: Text("登陆"),
           ),
