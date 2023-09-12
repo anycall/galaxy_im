@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:galaxy_im/Helper/RouteManager.dart';
 import 'package:get/get.dart';
 
 class Me extends StatefulWidget {
@@ -24,7 +25,18 @@ class _MeState extends State<Me> {
           ),
         title: Text('me'.tr),
       ),
-      body: Center(),
+      body: Center(
+        child: Column(
+          children: [
+            ElevatedButton(
+          onPressed: () {
+            Get.toNamed(Routes.skin);
+          },
+          child: Text("皮肤"),
+        ),
+          ],
+        ),
+      ),
     );
   }
 }

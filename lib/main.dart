@@ -12,6 +12,7 @@ void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   await Helper.localizationService.init();
+  await Helper.themeManager.init();
   runApp(const MyApp());
 }
 
@@ -28,7 +29,7 @@ class MyApp extends StatelessWidget {
       child: GetMaterialApp(
         title: 'Galaxy IM',
         theme: ThemeData(
-          colorScheme: ColorScheme.light(),
+          colorScheme: Helper.themeManager.currentColorScheme,
           useMaterial3: true,
           splashColor: Colors.transparent,
           highlightColor: Colors.transparent,

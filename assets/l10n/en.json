@@ -3,5 +3,7 @@
     "galaxy": "Galaxy",
     "contacts": "Contacts",
     "me": "Me",
-    "chats": "Chats"
+    "chats": "Chats",
+    "skin": "Theme",
+    "font": "Font"
 }

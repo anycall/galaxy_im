@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class Contacts extends StatefulWidget {
-  const Contacts({super.key});
+class FontPage extends StatefulWidget {
+  const FontPage({super.key});
 
   @override
-  State<Contacts> createState() => _ContactsState();
+  State<FontPage> createState() => _FontPageState();
 }
 
-class _ContactsState extends State<Contacts> {
+class _FontPageState extends State<FontPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,7 +22,7 @@ class _ContactsState extends State<Contacts> {
             height: 0.25,
           ),
         ),
-        title: Text('contacts'.tr),
+        title: Text('font'.tr),
       ),
       body: Center(),
     );

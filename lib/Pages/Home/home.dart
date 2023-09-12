@@ -21,6 +21,17 @@ class _HomePageState extends State<HomePage> with RestorationMixin {
   int _unreadCount = 0; //未读消息数
   int _friendRequestCount = 0; //好友请求数
 
+  var pages = <Widget>[
+    const Conversations(),
+    const Contacts(),
+    const Me(),
+  ];
+
+  // //push到子页面，参数是路由名称，路由名称在RouteManager中定义，还有push所传参数
+  // void _pushPage(String routeName, {Object? arguments}) {
+  //   Get.toNamed(routeName, arguments: arguments);
+  // }
+
   @override
   String get restorationId => Routes.home;
 
@@ -41,19 +52,15 @@ class _HomePageState extends State<HomePage> with RestorationMixin {
     final textTheme = Theme.of(context).textTheme;
 
     var bottomNavigationBarItems = <BottomNavigationBarItem>[
-      _buildBottomNavigationBarItem(Icons.chat_outlined, Icons.chat, 'chat', _unreadCount),
-      _buildBottomNavigationBarItem(Icons.contacts_outlined, Icons.contacts, 'contacts', _friendRequestCount),
+      _buildBottomNavigationBarItem(
+          Icons.chat_outlined, Icons.chat, 'chat', _unreadCount),
+      _buildBottomNavigationBarItem(Icons.contacts_outlined, Icons.contacts,
+          'contacts', _friendRequestCount),
       BottomNavigationBarItem(
         icon: const Icon(Icons.person_outlined),
         activeIcon: const Icon(Icons.person),
         label: 'me'.tr,
       ),
-    ];
-
-    var pages = <Widget>[
-      const Conversations(),
-      const Contacts(),
-      const Me(),
     ];
 
     return Scaffold(
@@ -62,13 +69,13 @@ class _HomePageState extends State<HomePage> with RestorationMixin {
       ),
       bottomNavigationBar: Container(
         decoration: const BoxDecoration(
-      border: Border(
-        top: BorderSide(
-          color: Colors.grey, 
-          width: 0.25, 
+          border: Border(
+            top: BorderSide(
+              color: Colors.grey,
+              width: 0.25,
+            ),
+          ),
         ),
-      ),
-    ),
         child: BottomNavigationBar(
           showUnselectedLabels: true,
           items: bottomNavigationBarItems,
@@ -95,30 +102,30 @@ class _HomePageState extends State<HomePage> with RestorationMixin {
   BottomNavigationBarItem _buildBottomNavigationBarItem(
       IconData iconData, IconData activeIconData, String label, int count) {
     return BottomNavigationBarItem(
-        icon: RepaintBoundary(
-          child: BDG.Badge(
-            showBadge: count > 0,
-            badgeAnimation: const BDG.BadgeAnimation.rotation(),
-            badgeContent: Text(
-              count.toString(),
-              style: const TextStyle(color: Colors.white),
-            ),
-            child: Icon(iconData),
+      icon: RepaintBoundary(
+        child: BDG.Badge(
+          showBadge: count > 0,
+          badgeAnimation: const BDG.BadgeAnimation.rotation(),
+          badgeContent: Text(
+            count.toString(),
+            style: const TextStyle(color: Colors.white),
           ),
+          child: Icon(iconData),
         ),
-        activeIcon: RepaintBoundary(
-          child: BDG.Badge(
-            showBadge: count > 0,
-            badgeAnimation: const BDG.BadgeAnimation.rotation(),
-            badgeContent: Text(
-              count.toString(),
-              style: const TextStyle(color: Colors.white),
-            ),
-            child: Icon(activeIconData),
+      ),
+      activeIcon: RepaintBoundary(
+        child: BDG.Badge(
+          showBadge: count > 0,
+          badgeAnimation: const BDG.BadgeAnimation.rotation(),
+          badgeContent: Text(
+            count.toString(),
+            style: const TextStyle(color: Colors.white),
           ),
+          child: Icon(activeIconData),
         ),
-        label: label.tr,
-      );
+      ),
+      label: label.tr,
+    );
   }
 }
 
