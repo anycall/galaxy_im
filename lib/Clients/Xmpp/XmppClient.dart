@@ -9,13 +9,15 @@ import 'package:galaxy_im/Clients/Xmpp/Basic_XEP.dart';
 import 'package:galaxy_im/Clients/Xmpp/Xmpp_Types.dart';
 import 'package:galaxy_im/Utils/Extensions.dart';
 import 'package:galaxy_im/Utils/LogUtil.dart';
+import 'package:get/get.dart';
 import 'package:xml/xml.dart';
 
 class XmppClient extends IClientInterface {
   late XmppLoginInfo _xmppLoginInfo;
-  String get _domain => _xmppLoginInfo.domain;
+  String get domain => _xmppLoginInfo.domain;
   late Socket _socket;
-  late String _account;
+  String get userName => _xmppLoginInfo.userName;
+  String get password => _xmppLoginInfo.password;
   late String _chatId;
   late String _token;
   late String _uid;
@@ -24,10 +26,14 @@ class XmppClient extends IClientInterface {
 
   late Completer<bool> _completer;
   List<XepMessageHandler> handlers = [];
-  final List<XEP> xeps = [];
+  final List<XEP> _xeps = [];
 
   XmppClient(XmppServerInfo serverInfo) : super(serverInfo) {
     var xmppServerInfo = serverInfo;
+    var xep_login = XEP_Login(this);
+    _xeps.addAll([xep_login]);
+
+    handlers.addAll(_xeps.mapMany((item) => item.receiveHandlers));
   }
 
   @override
@@ -64,18 +70,13 @@ class XmppClient extends IClientInterface {
     LogUtil.debug("ws.readystate:" + _ws.readyState.toString());
     var userName = _xmppLoginInfo.userName;
     var password = _xmppLoginInfo.password;
-    var crential = "\u0000$userName@$_domain\u0000$password";
+    var crential = "\u0000$userName@$domain\u0000$password";
 
     var base64Str = base64.encode(utf8.encode(crential));
     LogUtil.debug(crential);
     var openStr =
-        "<open from='$userName@$_domain' to='$_domain' version='1.0' xmlns='urn:ietf:params:xml:ns:xmpp-framing'/>";
+        "<open from='$userName@$domain' to='$domain' version='1.0' xmlns='urn:ietf:params:xml:ns:xmpp-framing'/>";
     _sendXmppMessage(openStr);
-
-    _sendXmppMessage(
-        '<?xml version="1.0"?><stream:stream xmlns:stream="http://etherx.jabber.org/streams" xmlns="jabber:client" xml:lang="zh-CN" xmlns:xml="http://www.w3.org/XML/1998/namespace" to="$_domain" version="1.0">');
-    _sendXmppMessage(
-        "<auth xmlns='urn:ietf:params:xml:ns:xmpp-sasl' mechanism='PLAIN'>$base64Str</auth>");
 
     return _completer.future;
   }
@@ -127,6 +128,46 @@ class XmppClient extends IClientInterface {
     } else {
       //如果没有转换成功，则不行过滤
     }
+  }
+
+  Future<XmlDocument> sendElement(XmlDocument xml) async {
+    var id = xml.rootElement.getAttribute("id") ?? "";
+    Completer<XmlDocument> completer = Completer();
+    var tHandler =
+        XepMessageHandler("", "", "", id, "", "", false, false, (xml) {
+      //send a sigal to invoke ;
+      completer.complete(xml);
+    });
+    handlers.add(tHandler);
+    send(xml.toXmlString());
+    // wait a signal from handleTlsMessage
+    XmlDocument xmlElement = await completer.future;
+    handlers.remove(tHandler);
+    return xmlElement;
+  }
+
+  /// 需要在这个方法中，进行一个等待
+  Future<XmlDocument> sendIQAsnyc(XmlDocument xml) async {
+    //用 dart创建一个带参数的信号量，然后在这个方法中，等待信号量的返回
+    var id = xml.rootElement.getAttribute("id") ?? "";
+    Completer<XmlDocument> completer = Completer();
+    var tHandler =
+        XepMessageHandler("", "", "", id, "", "", false, false, (xml) {
+      //send a sigal to invoke ;
+      completer.complete(xml);
+    });
+    handlers.add(tHandler);
+    send(xml.toString());
+
+    // wait a signal from handleTlsMessage
+    XmlDocument xmlIq = await completer.future;
+    handlers.remove(tHandler);
+    return xmlIq;
+  }
+
+  void send(String message) {
+    if (rawOutput != null) rawOutput!(message, prefix: "xmpp");
+    _ws.add(message);
   }
 
   @override
