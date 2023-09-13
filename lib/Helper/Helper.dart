@@ -13,9 +13,11 @@ class Helper {
   static ThemeManager get themeManager => _themeManager;
 
   ///主题色（背景）
-  static Color get imPrimary => _themeManager.currentColorScheme.inversePrimary;
+  static Color get imPrimary => _themeManager.currentColorScheme.onPrimary;
   ///主题色反色（字）
   static Color get imSurface => _themeManager.currentColorScheme.onSurface;
+  ///按钮和头像
+  static Color get imSecondary => _themeManager.currentColorScheme.onSecondary;
 
   ///字体大小
   ///标题

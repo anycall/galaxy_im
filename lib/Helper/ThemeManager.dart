@@ -24,7 +24,6 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -51,9 +50,9 @@ class ThemeManager extends GetxController {
     Brightness platformBrightness =
         WidgetsBinding.instance.platformDispatcher.platformBrightness;
     if (platformBrightness == Brightness.dark) {
-      currentColorScheme = const ColorScheme.dark();
+      currentColorScheme = const ColorScheme.dark(onSecondary: Colors.blue);
     } else {
-      currentColorScheme = const ColorScheme.light();
+      currentColorScheme = const ColorScheme.light(onSecondary: Colors.blue);
     }
 
     if (savedSkin != null) {
@@ -86,7 +85,6 @@ class ThemeManager extends GetxController {
           contentFontSize: 12,
         );
       case 2:
-      //case 1的120%
         return FontSizeStyle(
           titleFontSize: 24,
           subtitleFontSize: 19,
@@ -144,7 +142,7 @@ class ThemeManager extends GetxController {
   Future<void> updateColorScheme(bool auto,
       {ColorScheme? colorScheme}) async {
     if (auto == false) {
-      colorScheme ??= const ColorScheme.light();
+      colorScheme ??= const ColorScheme.light(onSecondary: Colors.blue);
       String color = colorSchemeToJson(colorScheme);
       await saveColorScheme(color);
       currentColorScheme = colorScheme;
@@ -161,9 +159,9 @@ class ThemeManager extends GetxController {
       Brightness platformBrightness =
           WidgetsBinding.instance.platformDispatcher.platformBrightness;
       if (platformBrightness == Brightness.dark) {
-        currentColorScheme = const ColorScheme.dark();
+        currentColorScheme = const ColorScheme.dark(onSecondary: Colors.blue);
       } else {
-        currentColorScheme = const ColorScheme.light();
+        currentColorScheme = const ColorScheme.light(onSecondary: Colors.blue);
       }
       Get.changeTheme(ThemeData(
         colorScheme: currentColorScheme,

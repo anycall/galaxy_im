@@ -5,5 +5,13 @@
     "me": "Me",
     "chats": "Chats",
     "skin": "Theme",
-    "font": "Font"
+    "login": "Login",
+    "username": "Username",
+    "password": "Password",
+    "enterUsername": "Please enter your username",
+    "enterPassword": "Please enter your password",
+    "onlyAlphanumeric": "Please enter only letters and numbers",
+    "usernameLengthError": "Username must be at least 2 characters long",
+    "passwordLengthError": "Password must be at least 6 characters long",
+    "loginRequirements": "Alphanumeric, >%s chars"
 }
