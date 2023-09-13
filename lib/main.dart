@@ -30,6 +30,7 @@ class MyApp extends StatelessWidget {
         title: 'Galaxy IM',
         theme: ThemeData(
           colorScheme: Helper.themeManager.currentColorScheme,
+          textTheme: TextTheme(labelMedium: TextStyle(fontSize: Helper.themeManager.currentFontSizeStyle.subtitleFontSize)),
           useMaterial3: true,
           splashColor: Colors.transparent,
           highlightColor: Colors.transparent,

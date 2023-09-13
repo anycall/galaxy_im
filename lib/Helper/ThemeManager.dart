@@ -24,6 +24,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -37,7 +38,11 @@ class ThemeManager extends GetxController {
   ThemeManager._internal();
 
   late ColorScheme currentColorScheme;
-  late TextTheme currentTextTheme;
+  FontSizeStyle currentFontSizeStyle = FontSizeStyle(
+    titleFontSize: 20,
+    subtitleFontSize: 16,
+    contentFontSize: 12,
+  );
 
   Future<void> init() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -53,6 +58,47 @@ class ThemeManager extends GetxController {
 
     if (savedSkin != null) {
       currentColorScheme = jsonToColorScheme(savedSkin);
+    }
+
+    int? fontSizeIndex = prefs.getInt('fontSize');
+    if (fontSizeIndex != null) {
+      currentFontSizeStyle = getFontSizeStyle(fontSizeIndex);
+    }
+    else{
+      //存储默认字体大小
+      saveFontSize(FontSize.standard);
+    }
+  }
+
+  // 根据枚举获取字体大小
+  FontSizeStyle getFontSizeStyle(int fontSizeIndex) {
+    switch (fontSizeIndex) {
+      case 0:
+        return FontSizeStyle(
+          titleFontSize: 16,
+          subtitleFontSize: 13,
+          contentFontSize: 10,
+        );
+      case 1:
+        return FontSizeStyle(
+          titleFontSize: 20,
+          subtitleFontSize: 16,
+          contentFontSize: 12,
+        );
+      case 2:
+      //case 1的120%
+        return FontSizeStyle(
+          titleFontSize: 24,
+          subtitleFontSize: 19,
+          contentFontSize: 14,
+        );
+
+      default:
+        return FontSizeStyle(
+          titleFontSize: 20,
+          subtitleFontSize: 16,
+          contentFontSize: 12,
+        );
     }
   }
 
@@ -101,6 +147,7 @@ class ThemeManager extends GetxController {
       colorScheme ??= const ColorScheme.light();
       String color = colorSchemeToJson(colorScheme);
       await saveColorScheme(color);
+      currentColorScheme = colorScheme;
 
       Get.changeTheme(ThemeData(
         colorScheme: colorScheme,
@@ -120,12 +167,27 @@ class ThemeManager extends GetxController {
       }
       Get.changeTheme(ThemeData(
         colorScheme: currentColorScheme,
+        textTheme: TextTheme(labelMedium: TextStyle(fontSize: currentFontSizeStyle.subtitleFontSize)),
         useMaterial3: true,
         splashColor: Colors.transparent,
         highlightColor: Colors.transparent,
         hoverColor: Colors.transparent,
       ));
     }
+  }
+
+  //切换字体大小的方法
+  Future<void> updateFontSize(FontSize fontSize) async {
+    currentFontSizeStyle = getFontSizeStyle(fontSize.index);
+    await saveFontSize(fontSize);
+    Get.changeTheme(ThemeData(
+        colorScheme: currentColorScheme,
+        textTheme: TextTheme(labelMedium: TextStyle(fontSize: currentFontSizeStyle.subtitleFontSize)),
+        useMaterial3: true,
+        splashColor: Colors.transparent,
+        highlightColor: Colors.transparent,
+        hoverColor: Colors.transparent,
+      ));
   }
 
   //SharedPreferencess保存主题
@@ -142,4 +204,26 @@ class ThemeManager extends GetxController {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.remove('skin');
   }
+
+  //SharedPreferencess保存字体大小(枚举)
+  Future<void> saveFontSize(FontSize fontSize) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setInt('fontSize', fontSize.index);
+  }
+}
+
+//字体大小的枚举类，有小、标准、大三种
+enum FontSize { small, standard, large }
+
+// 字体类
+class FontSizeStyle {
+  final double titleFontSize;
+  final double subtitleFontSize;
+  final double contentFontSize;
+
+  FontSizeStyle({
+    required this.titleFontSize,
+    required this.subtitleFontSize,
+    required this.contentFontSize,
+  });
 }

@@ -8,9 +8,22 @@ class Helper {
   static final LocalizationService _localizationService = LocalizationService();
   static LocalizationService get localizationService => _localizationService;
 
-    /// 主题
+  /// 主题
   static final ThemeManager _themeManager = ThemeManager();
   static ThemeManager get themeManager => _themeManager;
+
+  ///主题色（背景）
+  static Color get imPrimary => _themeManager.currentColorScheme.inversePrimary;
+  ///主题色反色（字）
+  static Color get imSurface => _themeManager.currentColorScheme.onSurface;
+
+  ///字体大小
+  ///标题
+  static double get titleFontSize => _themeManager.currentFontSizeStyle.titleFontSize.sp;
+  ///副标题
+  static double get subtitleFontSize => _themeManager.currentFontSizeStyle.subtitleFontSize.sp;
+  ///内容
+  static double get contentFontSize => _themeManager.currentFontSizeStyle.contentFontSize.sp;
 
   /// 获取屏幕参数
   /// 获取屏幕高度

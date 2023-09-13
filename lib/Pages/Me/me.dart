@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:galaxy_im/Helper/Helper.dart';
 import 'package:galaxy_im/Helper/RouteManager.dart';
 import 'package:get/get.dart';
 
@@ -13,27 +14,37 @@ class _MeState extends State<Me> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+      backgroundColor: Theme.of(context).colorScheme.onPrimary,
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        backgroundColor: Theme.of(context).colorScheme.onPrimary,
         bottom: PreferredSize(
-            preferredSize: const Size.fromHeight(0.25), 
-            child: Container(
-              color: Colors.grey, 
-              height: 0.25, 
-            ),
+          preferredSize: const Size.fromHeight(0.25),
+          child: Container(
+            color: Colors.grey,
+            height: 0.25,
           ),
-        title: Text('me'.tr),
+        ),
+        title: Text(
+          'me'.tr,
+          style: TextStyle(fontSize: Helper.titleFontSize),
+        ),
       ),
       body: Center(
         child: Column(
           children: [
             ElevatedButton(
-          onPressed: () {
-            Get.toNamed(Routes.skin);
-          },
-          child: Text("皮肤"),
-        ),
+              onPressed: () {
+                Get.toNamed(Routes.skin);
+              },
+              child: Text("皮肤"),
+            ),
+            const SizedBox(height: 10),
+            ElevatedButton(
+              onPressed: () {
+                Get.toNamed(Routes.font);
+              },
+              child: Text("字号"),
+            ),
           ],
         ),
       ),
