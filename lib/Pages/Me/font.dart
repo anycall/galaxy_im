@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:galaxy_im/Helper/Helper.dart';
 import 'package:galaxy_im/Helper/ThemeManager.dart';
+import 'package:galaxy_im/Pages/Widget/WidgetFactory.dart';
 import 'package:get/get.dart';
 
 class FontPage extends StatefulWidget {
@@ -16,15 +17,13 @@ class _FontPageState extends State<FontPage> {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.onPrimary,
       appBar: AppBar(
-      backgroundColor: Theme.of(context).colorScheme.onPrimary,
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(0.25),
-          child: Container(
-            color: Colors.grey,
-            height: 0.25,
-          ),
+        backgroundColor: Theme.of(context).colorScheme.onPrimary,
+        bottom: WidgetFactory().buildAppBarLine(),
+        title: Text(
+          'font'.tr,
+          style: TextStyle(fontSize: Helper.titleFontSize),
         ),
-        title: Text('font'.tr, style: TextStyle(fontSize: Helper.titleFontSize),),
+        leading: WidgetFactory().buildAppBarBackButton(context),
       ),
       body: Center(
         child: Column(

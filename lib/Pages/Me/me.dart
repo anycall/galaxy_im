@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:galaxy_im/Helper/Helper.dart';
 import 'package:galaxy_im/Helper/RouteManager.dart';
+import 'package:galaxy_im/Pages/Widget/WidgetFactory.dart';
 import 'package:get/get.dart';
 
 class Me extends StatefulWidget {
@@ -17,13 +18,7 @@ class _MeState extends State<Me> {
       backgroundColor: Theme.of(context).colorScheme.onPrimary,
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.onPrimary,
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(0.25),
-          child: Container(
-            color: Colors.grey,
-            height: 0.25,
-          ),
-        ),
+        bottom: WidgetFactory().buildAppBarLine(),
         title: Text(
           'me'.tr,
           style: TextStyle(fontSize: Helper.titleFontSize),

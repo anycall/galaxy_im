@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:galaxy_im/Helper/Helper.dart';
 import 'package:galaxy_im/Helper/RouteManager.dart';
+import 'package:galaxy_im/Pages/Widget/WidgetFactory.dart';
 import 'package:get/get.dart';
 
 class LoginPage extends StatefulWidget {
@@ -17,6 +18,7 @@ class _LoginPageState extends State<LoginPage> {
       backgroundColor: Theme.of(context).colorScheme.onPrimary,
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.onPrimary,
+        bottom: WidgetFactory().buildAppBarLine(),
         title: Text('galaxy'.tr, style: TextStyle(fontSize: Helper.titleFontSize),),
       ),
 
