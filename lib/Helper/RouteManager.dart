@@ -16,6 +16,7 @@
 import 'package:galaxy_im/Pages/Home/home.dart';
 import 'package:galaxy_im/Pages/Login/login.dart';
 import 'package:galaxy_im/Pages/Me/font.dart';
+import 'package:galaxy_im/Pages/Me/language.dart';
 import 'package:galaxy_im/Pages/Me/skin.dart';
 import 'package:get/get.dart';
 import 'package:get/get_navigation/src/routes/get_route.dart';
@@ -26,6 +27,7 @@ abstract class Routes {
   static const login = '/login';
   static const skin = '/skin';
   static const font = '/font';
+  static const language = '/language';
 }
 
 abstract class AppPages {
@@ -35,5 +37,6 @@ abstract class AppPages {
     GetPage(name: Routes.login, page: () => const LoginPage()),
     GetPage(name: Routes.skin, page: () => const SkinPage()),
     GetPage(name: Routes.font, page: () => const FontPage()),
+    GetPage(name: Routes.language, page: () => const LanguagePage()),
   ];
 }

@@ -27,11 +27,6 @@ class _HomePageState extends State<HomePage> with RestorationMixin {
     const Me(),
   ];
 
-  // //push到子页面，参数是路由名称，路由名称在RouteManager中定义，还有push所传参数
-  // void _pushPage(String routeName, {Object? arguments}) {
-  //   Get.toNamed(routeName, arguments: arguments);
-  // }
-
   @override
   String get restorationId => Routes.home;
 
@@ -53,7 +48,7 @@ class _HomePageState extends State<HomePage> with RestorationMixin {
 
     var bottomNavigationBarItems = <BottomNavigationBarItem>[
       _buildBottomNavigationBarItem(
-          Icons.chat_outlined, Icons.chat, 'chat', _unreadCount),
+          Icons.chat_outlined, Icons.chat, 'chats', _unreadCount),
       _buildBottomNavigationBarItem(Icons.contacts_outlined, Icons.contacts,
           'contacts', _friendRequestCount),
       BottomNavigationBarItem(
@@ -129,6 +124,5 @@ class _HomePageState extends State<HomePage> with RestorationMixin {
   }
 }
 
-//         Helper.localizationService.setLocale('zh');
-//         Get.updateLocale(const Locale('zh'));
+
 

@@ -14,5 +14,6 @@
     "onlyAlphanumeric": "请只输入字母和数字",
     "usernameLengthError": "用户名长度不能少于2位",
     "passwordLengthError": "密码长度不能少于6位",
-    "loginRequirements": "字母或者数字且长度不能少于%s位"
+    "loginRequirements": "字母或者数字且长度不能少于%s位",
+    "language": "语言"
 }
