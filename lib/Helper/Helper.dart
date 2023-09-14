@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:galaxy_im/Helper/LocalizationService.dart';
 import 'package:galaxy_im/Helper/ThemeManager.dart';
+import 'package:get/get.dart';
 
 class Helper {
   /// 国际化
@@ -40,4 +41,27 @@ class Helper {
   static double get topSafeHeight => ScreenUtil().statusBarHeight;
   ///底部状态栏高度（包含安全区）
   static double get bottomSafeHeight => ScreenUtil().bottomBarHeight;
+
+  ///日期
+  ///获取当前时间戳
+  static int get currentTimeStamp => DateTime.now().millisecondsSinceEpoch;
+  ///获取会话列表时间格式
+  static String getConversationFormatDate(int timeStamp) {
+  DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(timeStamp);
+  DateTime now = DateTime.now();
+  if (dateTime.year == now.year) {
+    if (dateTime.month == now.month && dateTime.day == now.day) {
+      return '${dateTime.hour.toString().padLeft(2, '0')}:${dateTime.minute.toString().padLeft(2, '0')}';
+    } else if (dateTime.month == now.month && dateTime.day == now.day - 1) {
+      return '${'yesterday'.tr} ${dateTime.hour.toString().padLeft(2, '0')}:${dateTime.minute.toString().padLeft(2, '0')}';
+    } else {
+      return '${dateTime.month.toString().padLeft(2, '0')}-${dateTime.day.toString().padLeft(2, '0')}';
+    }
+  } else {
+    return '${dateTime.year}-${dateTime.month.toString().padLeft(2, '0')}-${dateTime.day.toString().padLeft(2, '0')}';
+  }
+}
+  
+
+
 }

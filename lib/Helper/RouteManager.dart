@@ -13,9 +13,11 @@
 ///   Get.toNamed(Routes.login, arguments: {'id': 123}); //跳转并传递参数。登录页取值：Get.arguments['id']
 ///   Get.back(result: {'id': 123}); //返回并传递参数。上一页取值：final result = await Get.toNamed(Routes.login); 对应result['id']
 
+import 'package:galaxy_im/Pages/Chats/privateChat.dart';
 import 'package:galaxy_im/Pages/Home/home.dart';
 import 'package:galaxy_im/Pages/Login/login.dart';
 import 'package:galaxy_im/Pages/Me/font.dart';
+import 'package:galaxy_im/Pages/Me/language.dart';
 import 'package:galaxy_im/Pages/Me/skin.dart';
 import 'package:get/get.dart';
 import 'package:get/get_navigation/src/routes/get_route.dart';
@@ -26,6 +28,8 @@ abstract class Routes {
   static const login = '/login';
   static const skin = '/skin';
   static const font = '/font';
+  static const language = '/language';
+  static const privateChat = '/privateChat';
 }
 
 abstract class AppPages {
@@ -35,5 +39,7 @@ abstract class AppPages {
     GetPage(name: Routes.login, page: () => const LoginPage()),
     GetPage(name: Routes.skin, page: () => const SkinPage()),
     GetPage(name: Routes.font, page: () => const FontPage()),
+    GetPage(name: Routes.language, page: () => const LanguagePage()),
+    GetPage(name: Routes.privateChat, page: () => const PrivateChatPage()),
   ];
 }

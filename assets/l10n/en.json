@@ -13,5 +13,9 @@
     "onlyAlphanumeric": "Please enter only letters and numbers",
     "usernameLengthError": "Username must be at least 2 characters long",
     "passwordLengthError": "Password must be at least 6 characters long",
-    "loginRequirements": "Alphanumeric, >%s chars"
+    "loginRequirements": "Alphanumeric, >%s chars",
+    "language": "Language",
+    "delete": "Delete",
+    "deleteChat": "Delete chat",
+    "yesterday": "Yesterday"
 }
