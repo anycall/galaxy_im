@@ -3,7 +3,6 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:galaxy_im/Helper/Helper.dart';
 import 'package:galaxy_im/Helper/RouteManager.dart';
-import 'package:galaxy_im/Pages/Home/home.dart';
 import 'package:galaxy_im/Pages/Login/login.dart';
 import 'package:get/get.dart';
 import 'Helper/LocalizationService.dart';

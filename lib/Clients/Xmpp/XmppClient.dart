@@ -1,9 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:ffi';
 import 'dart:io';
 import 'dart:math';
-import 'dart:typed_data';
 import 'package:galaxy_im/Clients/IClientInterface.dart';
 import 'package:galaxy_im/Clients/Xmpp/Basic_XEP.dart';
 import 'package:galaxy_im/Clients/Xmpp/Xmpp_Types.dart';
@@ -24,14 +22,14 @@ class XmppClient extends IClientInterface {
   late String _timer;
   late WebSocket _ws;
 
-  late Completer<bool> _completer;
+  late Completer<bool> _loginCompleter;
   List<XepMessageHandler> handlers = [];
   final List<XEP> _xeps = [];
 
   XmppClient(XmppServerInfo serverInfo) : super(serverInfo) {
     var xmppServerInfo = serverInfo;
-    var xep_login = XEP_Login(this);
-    _xeps.addAll([xep_login]);
+    var xepLogin = XEP_Login(this);
+    _xeps.addAll([xepLogin]);
 
     handlers.addAll(_xeps.mapMany((item) => item.receiveHandlers));
   }
@@ -39,6 +37,7 @@ class XmppClient extends IClientInterface {
   @override
   Future<bool> login(BaseLoginInfo info) async {
     _xmppLoginInfo = info as XmppLoginInfo;
+    _loginCompleter = Completer();
     var r = Random();
     String key = base64.encode(List<int>.generate(8, (_) => r.nextInt(255)));
     HttpClient client = HttpClient(context: SecurityContext());
@@ -67,7 +66,7 @@ class XmppClient extends IClientInterface {
         onError: (err) => {LogUtil.error(err)},
         onDone: () => {LogUtil.debug("onDone")});
 
-    LogUtil.debug("ws.readystate:" + _ws.readyState.toString());
+    LogUtil.debug("ws.readystate:${_ws.readyState}");
     var userName = _xmppLoginInfo.userName;
     var password = _xmppLoginInfo.password;
     var crential = "\u0000$userName@$domain\u0000$password";
@@ -78,7 +77,7 @@ class XmppClient extends IClientInterface {
         "<open from='$userName@$domain' to='$domain' version='1.0' xmlns='urn:ietf:params:xml:ns:xmpp-framing'/>";
     _sendXmppMessage(openStr);
 
-    return _completer.future;
+    return _loginCompleter.future;
   }
 
   //直接使用websocket发送消息
@@ -88,12 +87,12 @@ class XmppClient extends IClientInterface {
   }
 
   void wsHandleInComingMessage(String message) {
-    if (rawOutput != null) rawOutput!(message, prefix: "ws");
+    rawOutput(message, prefix: "ws");
 
     if (message.startsWith("<success")) {
-      _completer.complete(true);
+      _loginCompleter.complete(true);
     } else if (message.startsWith("<failure")) {
-      _completer.complete(false);
+      _loginCompleter.complete(false);
     }
     var (parseResult, parseDoc) = XmlDocumentExtension.tryParse(message);
 
@@ -166,7 +165,7 @@ class XmppClient extends IClientInterface {
   }
 
   void send(String message) {
-    if (rawOutput != null) rawOutput!(message, prefix: "xmpp");
+    rawOutput(message, prefix: "xmpp");
     _ws.add(message);
   }
 

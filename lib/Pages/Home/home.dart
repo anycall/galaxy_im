@@ -1,6 +1,4 @@
-import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
-import 'package:galaxy_im/Helper/Helper.dart';
 import 'package:galaxy_im/Helper/RouteManager.dart';
 import 'package:galaxy_im/Pages/Chats/chats.dart';
 import 'package:galaxy_im/Pages/Contacts/contacts.dart';
@@ -18,8 +16,8 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> with RestorationMixin {
   final RestorableInt _currentIndex = RestorableInt(0);
 
-  int _unreadCount = 0; //未读消息数
-  int _friendRequestCount = 0; //好友请求数
+  final int _unreadCount = 0; //未读消息数
+  final int _friendRequestCount = 0; //好友请求数
 
   var pages = <Widget>[
     const Conversations(),

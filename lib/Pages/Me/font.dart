@@ -32,21 +32,21 @@ class _FontPageState extends State<FontPage> {
               onPressed: () {
                 Helper.themeManager.updateFontSize(FontSize.small);
               },
-              child: Text("小"),
+              child: const Text("小"),
             ),
             const SizedBox(height: 10),
             ElevatedButton(
               onPressed: () {
                 Helper.themeManager.updateFontSize(FontSize.standard);
               },
-              child: Text("标准"),
+              child: const Text("标准"),
             ),
             const SizedBox(height: 10),
             ElevatedButton(
               onPressed: () {
                 Helper.themeManager.updateFontSize(FontSize.large);
               },
-              child: Text("大"),
+              child: const Text("大"),
             ),
           ],
         ),

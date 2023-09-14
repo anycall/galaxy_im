@@ -31,14 +31,14 @@ class _MeState extends State<Me> {
               onPressed: () {
                 Get.toNamed(Routes.skin);
               },
-              child: Text("皮肤"),
+              child: const Text("皮肤"),
             ),
             const SizedBox(height: 10),
             ElevatedButton(
               onPressed: () {
                 Get.toNamed(Routes.font);
               },
-              child: Text("字号"),
+              child: const Text("字号"),
             ),
           ],
         ),

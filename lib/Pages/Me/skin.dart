@@ -28,7 +28,7 @@ class _SkinPageState extends State<SkinPage> {
               onPressed: () {
                 Helper.themeManager.updateColorScheme(true);
               },
-              child: Text("自动"),
+              child: const Text("自动"),
             ),
             const SizedBox(height: 10),
             ElevatedButton(
@@ -36,7 +36,7 @@ class _SkinPageState extends State<SkinPage> {
                 Helper.themeManager.updateColorScheme(false,
                     colorScheme: const ColorScheme.light(onSecondary: Colors.blue));
               },
-              child: Text("白天"),
+              child: const Text("白天"),
             ),
             const SizedBox(height: 10),
             ElevatedButton(
@@ -44,7 +44,7 @@ class _SkinPageState extends State<SkinPage> {
                 Helper.themeManager.updateColorScheme(false,
                     colorScheme: const ColorScheme.dark(onSecondary: Colors.blue));
               },
-              child: Text("黑天"),
+              child: const Text("黑天"),
             ),
           ],
         ),

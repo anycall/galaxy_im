@@ -2,7 +2,6 @@
 // 例如：XmppClient，是实现了Xmpp协议链接的客户端
 // 接口定义了连接，断开，重连，接受消息，发送消息，登录，登出等方法
 
-import 'dart:io';
 
 abstract class IClientInterface {
   BaseServerInfo serverInfo;

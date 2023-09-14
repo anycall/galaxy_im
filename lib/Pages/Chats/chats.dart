@@ -23,7 +23,7 @@ class _ConversationsState extends State<Conversations> {
           style: TextStyle(fontSize: Helper.titleFontSize),
         ),
       ),
-      body: Center(),
+      body: const Center(),
     );
   }
 }

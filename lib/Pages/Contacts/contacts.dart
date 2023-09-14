@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:galaxy_im/Helper/Helper.dart';
 import 'package:galaxy_im/Pages/Widget/WidgetFactory.dart';
 import 'package:get/get.dart';
@@ -21,7 +20,7 @@ class _ContactsState extends State<Contacts> {
         bottom: WidgetFactory().buildAppBarLine(),
         title: Text('contacts'.tr, style: TextStyle(fontSize: Helper.titleFontSize),),
       ),
-      body: Center(),
+      body: const Center(),
     );
   }
 }

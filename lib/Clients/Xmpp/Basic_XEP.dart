@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:flutter/rendering.dart';
 import 'package:galaxy_im/Clients/Xmpp/XmppClient.dart';
 import 'package:galaxy_im/Clients/Xmpp/Xmpp_Types.dart';
 import 'package:xml/xml.dart';
@@ -16,7 +15,7 @@ abstract class XEP {
 
   ///生成一个GUID，返回GUID字符串
   String newGuid() {
-    var uuid = Uuid();
+    var uuid = const Uuid();
     return uuid.v4();
   }
 
@@ -41,13 +40,13 @@ abstract class XEP {
 
   List<MessageFilter> getBeforeMessageFilters() {
     var filters = beforeMessageFilter;
-    LogUtil.debug('${xep_name} 包含 ${filters.length} 消息前处理过滤器');
+    LogUtil.debug('$xep_name 包含 ${filters.length} 消息前处理过滤器');
     return filters;
   }
 
   List<MessageFilter> getAfterMessageFitlers() {
     var filters = afterMessageFitler;
-    LogUtil.debug('${xep_name} 包含 ${filters.length} 消息后处理过滤器');
+    LogUtil.debug('$xep_name 包含 ${filters.length} 消息后处理过滤器');
     return filters;
   }
 }
@@ -119,7 +118,7 @@ class XEP_Login extends XEP implements IXEP_Common {
     XmlElement? received = message.lastElementChild;
     String? name = received?.name.toString();
     if (name == 'received') {
-      print("receivedHandler 处理程序" + xml.toString());
+      print("receivedHandler 处理程序$xml");
       // XmlDocument document = sendDisplayed(
       //     message.getAttribute("from").toString(),
       //     message.getAttribute("id").toString());

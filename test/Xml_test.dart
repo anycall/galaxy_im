@@ -9,7 +9,7 @@ void main() {
     var (result, doc) = XmlDocumentExtension.tryParse(openResultXml);
     if (result) {
       var name = doc!.rootElement.localName.toString();
-      var from = doc!.rootElement.getAttribute("from");
+      var from = doc.rootElement.getAttribute("from");
 
       assert(name == "open" && from == "xmpp.cloud");
     } else {
