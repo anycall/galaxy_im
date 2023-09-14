@@ -41,7 +41,6 @@ class _LoginPageState extends State<LoginPage> with RestorationMixin {
 
   //登录
   void _login() async {
-    //TODO: 登录并初始化，一些费时操作
     final form = _formKey.currentState!;
     if (!form.validate()) {
       _autoValidateModeIndex.value = AutovalidateMode.always.index;
@@ -50,6 +49,9 @@ class _LoginPageState extends State<LoginPage> with RestorationMixin {
       _btnController.reset();
     } else {
       form.save();
+      //TODO: 登录并初始化，一些费时操作
+      ///
+      ///
       await Future.delayed(const Duration(seconds: 1));
       _btnController.success();
       await Future.delayed(const Duration(seconds: 1));
@@ -84,6 +86,7 @@ class _LoginPageState extends State<LoginPage> with RestorationMixin {
   }
 
   Widget _buildBody(BuildContext context) {
+    double iconPadding = (Helper.screenHeight / 2 - Helper.screenWidth / 3) / 2;
     return Form(
       key: _formKey,
       autovalidateMode: AutovalidateMode.values[_autoValidateModeIndex.value],
@@ -94,13 +97,13 @@ class _LoginPageState extends State<LoginPage> with RestorationMixin {
           physics: const ClampingScrollPhysics(),
           child: Column(
             children: [
-              SizedBox(height: 150.r),
+              SizedBox(height: iconPadding),
               Icon(
                 Icons.insights,
-                size: Helper.screenWidth / 3,
+                size: Helper.screenWidth / 4,
                 color: Helper.imSurface,
               ),
-              SizedBox(height: 80.r),
+              SizedBox(height: iconPadding - 30),
               TapRegion(
                   onTapOutside: (event) => FocusScope.of(context).unfocus(),
                   child: Column(
@@ -119,6 +122,7 @@ class _LoginPageState extends State<LoginPage> with RestorationMixin {
                               TextStyle(color: Helper.imSurface),
                           contentPadding: const EdgeInsets.only(
                               top: 2, left: 10, right: 10),
+                          errorStyle: const TextStyle(height: 0.3),
                           focusedBorder:
                               _buildOutlineInputBorder(Helper.imSurface),
                           focusedErrorBorder: _buildOutlineInputBorder(
@@ -138,7 +142,7 @@ class _LoginPageState extends State<LoginPage> with RestorationMixin {
                         },
                         validator: _validateName,
                       ),
-                      SizedBox(height: 24.r),
+                      const SizedBox(height: 20),
                       TextFormField(
                         restorationId: 'password_field',
                         textInputAction: TextInputAction.next,
@@ -153,6 +157,7 @@ class _LoginPageState extends State<LoginPage> with RestorationMixin {
                               TextStyle(color: Helper.imSurface),
                           contentPadding: const EdgeInsets.only(
                               top: 2, left: 10, right: 10),
+                          errorStyle: const TextStyle(height: 0.3),
                           focusedBorder:
                               _buildOutlineInputBorder(Helper.imSurface),
                           focusedErrorBorder: _buildOutlineInputBorder(
@@ -185,7 +190,7 @@ class _LoginPageState extends State<LoginPage> with RestorationMixin {
                         },
                         validator: _validatePassword,
                       ),
-                      SizedBox(height: 24.r),
+                      const SizedBox(height: 40),
                     ],
                   ) // your sub-tree that triggered the keyboard
                   ),
