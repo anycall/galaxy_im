@@ -16,10 +16,10 @@ class _PrivateChatPageState extends State<PrivateChatPage> {
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.onPrimary,
         bottom: WidgetFactory().buildAppBarLine(),
-        title: Text('单聊'),
+        title: const Text('单聊'),
         leading: WidgetFactory().buildAppBarBackButton(context),
       ),
-      body: Center(),
+      body: const Center(),
     );
   }
 }

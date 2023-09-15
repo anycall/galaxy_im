@@ -53,7 +53,7 @@ class _MeState extends State<Me> {
               onPressed: () {
                 Get.toNamed(Routes.language);
               },
-              child: Text("语言"),
+              child: const Text("语言"),
             ),
           ],
         ),

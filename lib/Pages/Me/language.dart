@@ -32,7 +32,7 @@ class _LanguagePageState extends State<LanguagePage> {
                 Helper.localizationService.setLocale('zh');
                 Get.updateLocale(const Locale('zh'));
               },
-              child: Text("简体中文"),
+              child: const Text("简体中文"),
             ),
             const SizedBox(height: 10),
             ElevatedButton(
@@ -40,7 +40,7 @@ class _LanguagePageState extends State<LanguagePage> {
                 Helper.localizationService.setLocale('en');
                 Get.updateLocale(const Locale('en'));
               },
-              child: Text("English"),
+              child: const Text("English"),
             ),
           ],
         ),
