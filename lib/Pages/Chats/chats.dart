@@ -110,10 +110,9 @@ class _ConversationsState extends State<Conversations> {
           _goToChatPage(index);
         },
         child: Padding(
-          padding: const EdgeInsets.only(top: 10, left: 10, right: 10),
+          padding: const EdgeInsets.only(top: 10, left: 15, right: 15, bottom: 10),
           child: RepaintBoundary(
-            child: Column(
-              children: [
+            child: 
                 Row(
               children: [
                 ///头像
@@ -164,15 +163,6 @@ class _ConversationsState extends State<Conversations> {
                     ],
                   ),
                 ),
-              ],
-            ),
-            const SizedBox(height: 10),
-          Divider(
-            height: 0.25,
-            thickness: 0.25,
-            indent: avatarSize + 10,
-            color: Colors.grey,
-          ),
               ],
             )
           ),
