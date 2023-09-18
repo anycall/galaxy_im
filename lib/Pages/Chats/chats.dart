@@ -23,7 +23,8 @@ class _ConversationsState extends State<Conversations> {
       avatar: index.toString(),
       lastMessage: 'lastMessage$index， 哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈',
       unreadCount: 0,
-      timestamp: DateTime.now().millisecondsSinceEpoch - index * 1000 * 60 * 60 * 24,
+      timestamp:
+          DateTime.now().millisecondsSinceEpoch - index * 1000 * 60 * 60 * 24,
     );
   });
 
@@ -110,62 +111,61 @@ class _ConversationsState extends State<Conversations> {
           _goToChatPage(index);
         },
         child: Padding(
-          padding: const EdgeInsets.only(top: 10, left: 15, right: 15, bottom: 10),
+          padding:
+              const EdgeInsets.only(top: 10, left: 15, right: 15, bottom: 10),
           child: RepaintBoundary(
-            child: 
-                Row(
-              children: [
-                ///头像
-                RandomAvatar(
-                  model.avatar!,
-                  height: avatarSize,
-                  width: avatarSize,
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      ///名称和日期
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Flexible(
-                            child: Text(
-                              model.name!,
-                              style: TextStyle(
-                                fontSize: Helper.subtitleFontSize,
-                                fontWeight: FontWeight.bold,
-                              ),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                          const SizedBox(width: 10),
-                          Text(
-                            Helper.getConversationFormatDate(model.timestamp!),
+              child: Row(
+            children: [
+              ///头像
+              RandomAvatar(
+                model.avatar!,
+                height: avatarSize,
+                width: avatarSize,
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    ///名称和日期
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Flexible(
+                          child: Text(
+                            model.name!,
                             style: TextStyle(
-                                fontSize: Helper.contentFontSize,
-                                color: Colors.grey),
+                              fontSize: Helper.subtitleFontSize,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                           ),
-                        ],
-                      ),
-                      const SizedBox(height: 5),
-                      ///最后一条消息
-                      Text(
-                        model.lastMessage!,
-                        style: TextStyle(
-                            fontSize: Helper.contentFontSize,
-                            color: Colors.grey),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ],
-                  ),
+                        ),
+                        const SizedBox(width: 10),
+                        Text(
+                          Helper.getConversationFormatDate(model.timestamp!),
+                          style: TextStyle(
+                              fontSize: Helper.contentFontSize,
+                              color: Colors.grey),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 5),
+
+                    ///最后一条消息
+                    Text(
+                      model.lastMessage!,
+                      style: TextStyle(
+                          fontSize: Helper.contentFontSize, color: Colors.grey),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
                 ),
-              ],
-            )
-          ),
+              ),
+            ],
+          )),
         ),
       ),
     );
