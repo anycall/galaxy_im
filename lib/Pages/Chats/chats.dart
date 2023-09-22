@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_chat_types/flutter_chat_types.dart';
 import 'package:galaxy_im/Helper/Helper.dart';
 import 'package:galaxy_im/Helper/RouteManager.dart';
 import 'package:galaxy_im/Models/Conversation.dart';
@@ -52,7 +53,14 @@ class _ConversationsState extends State<Conversations> {
 
   //跳转到聊天页面
   void _goToChatPage(int index) {
-    Get.toNamed(Routes.privateChat);
+    Conversation model = conversationList[index];
+    User user = User(
+      id: '82091008-a484-4a89-ae75-a22bf8d6f3ac',//model.id,
+      firstName: model.name,
+      lastName: '',
+      imageUrl: model.avatar,
+    );
+    Get.toNamed(Routes.privateChat, arguments: user);
   }
 
   @override
@@ -61,6 +69,7 @@ class _ConversationsState extends State<Conversations> {
       backgroundColor: Theme.of(context).colorScheme.onPrimary,
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.onPrimary,
+        scrolledUnderElevation: 0,
         bottom: WidgetFactory().buildAppBarLine(),
         title: _buildTitle(),
       ),
@@ -107,6 +116,7 @@ class _ConversationsState extends State<Conversations> {
             }),
       ],
       child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
         onTap: () {
           _goToChatPage(index);
         },
@@ -118,7 +128,7 @@ class _ConversationsState extends State<Conversations> {
             children: [
               ///头像
               RandomAvatar(
-                model.avatar!,
+                model.avatar,
                 height: avatarSize,
                 width: avatarSize,
               ),
@@ -133,7 +143,7 @@ class _ConversationsState extends State<Conversations> {
                       children: [
                         Flexible(
                           child: Text(
-                            model.name!,
+                            model.name,
                             style: TextStyle(
                               fontSize: Helper.subtitleFontSize,
                               fontWeight: FontWeight.bold,
@@ -144,7 +154,7 @@ class _ConversationsState extends State<Conversations> {
                         ),
                         const SizedBox(width: 10),
                         Text(
-                          Helper.getConversationFormatDate(model.timestamp!),
+                          Helper.getConversationFormatDate(model.timestamp),
                           style: TextStyle(
                               fontSize: Helper.contentFontSize,
                               color: Colors.grey),
@@ -155,7 +165,7 @@ class _ConversationsState extends State<Conversations> {
 
                     ///最后一条消息
                     Text(
-                      model.lastMessage!,
+                      model.lastMessage,
                       style: TextStyle(
                           fontSize: Helper.contentFontSize, color: Colors.grey),
                       maxLines: 1,

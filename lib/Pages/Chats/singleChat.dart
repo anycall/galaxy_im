@@ -1,31 +1,37 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:bubble/bubble.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
+import 'package:flutter_chat_types/flutter_chat_types.dart';
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
+import 'package:flutter_launcher_icons/main.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:galaxy_im/Helper/Helper.dart';
 import 'package:galaxy_im/Pages/Widget/WidgetFactory.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mime/mime.dart';
 import 'package:open_filex/open_filex.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:random_avatar/random_avatar.dart';
 import 'package:uuid/uuid.dart';
 import 'package:http/http.dart' as http;
 
-class PrivateChatPage extends StatefulWidget {
-  const PrivateChatPage({super.key});
+class SingleChatPage extends StatefulWidget {
+  const SingleChatPage({super.key});
 
   @override
-  State<PrivateChatPage> createState() => _PrivateChatPageState();
+  State<SingleChatPage> createState() => _SingleChatPageState();
 }
 
-class _PrivateChatPageState extends State<PrivateChatPage> {
+class _SingleChatPageState extends State<SingleChatPage> {
+  final User _user = Get.arguments;
+
   List<types.Message> _messages = [];
-  final _user = const types.User(
-    id: '82091008-a484-4a89-ae75-a22bf8d6f3ac',
-  );
 
   @override
   void initState() {
@@ -209,32 +215,71 @@ class _PrivateChatPageState extends State<PrivateChatPage> {
     });
   }
 
-    void _handleMessageStatusTap(BuildContext _, types.Message message) async {
-      print('Message status tapped: ${message.status}');
+  void _handleMessageStatusTap(BuildContext _, types.Message message) async {
+    print('Message status tapped: ${message.status}');
+  }
 
-    }
-  
+  Widget _bubbleBuilder(
+    Widget child, {
+    required message,
+    required nextMessageInGroup,
+  }) =>
+      Bubble(
+        color: _user.id != message.author.id ||
+                message.type == types.MessageType.image
+            ? (Helper.isDarkMode
+                ? Helper.imSurface.withOpacity(0.2)
+                : Helper.imPrimary)
+            : Helper.imSecondary,
+        margin: nextMessageInGroup
+            ? const BubbleEdges.symmetric(horizontal: 6)
+            : null,
+        nip: nextMessageInGroup
+            ? BubbleNip.no
+            : _user.id != message.author.id
+                ? BubbleNip.leftBottom
+                : BubbleNip.rightBottom,
+        padding: message.type == types.MessageType.text
+            ? const BubbleEdges.all(0)
+            : const BubbleEdges.all(5),
+        elevation: 0,
+        child: child,
+      );
+
+  Widget _avatarBuilder(
+    String? url,
+  ) =>
+      RandomAvatar(
+        url ?? '',
+        width: 30.r,
+        height: 30.r,
+      );
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.onPrimary,
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.onPrimary,
+        scrolledUnderElevation: 0,
         bottom: WidgetFactory().buildAppBarLine(),
         title: Text('单聊'),
         leading: WidgetFactory().buildAppBarBackButton(context),
       ),
       body: Chat(
-          messages: _messages,
-          onAttachmentPressed: _handleAttachmentPressed,
-          onMessageTap: _handleMessageTap,
-          onMessageStatusTap: _handleMessageStatusTap,
-          onPreviewDataFetched: _handlePreviewDataFetched,
-          onSendPressed: _handleSendPressed,
-          showUserAvatars: true,
-          showUserNames: true,
-          user: _user,
-        ),
+        messages: _messages,
+        // onAttachmentPressed: _handleAttachmentPressed,
+        onMessageTap: _handleMessageTap,
+        onMessageStatusTap: _handleMessageStatusTap,
+        onPreviewDataFetched: _handlePreviewDataFetched,
+        onSendPressed: _handleSendPressed,
+        avatarBuilder: _avatarBuilder,
+        bubbleBuilder: _bubbleBuilder,
+        showUserAvatars: true,
+        showUserNames: true,
+        user: _user,
+        theme: Helper.chatTheme,
+      ),
     );
   }
 }

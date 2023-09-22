@@ -2,7 +2,7 @@
 /// light() 里的onPrimary是白色，onSurface是黑色
 /// dark() 里的onPrimary是黑色，onSurface是白色
 /// auto为系统皮肤
-/// 
+///
 /// 字体TextTheme
 /// displayLarge: 这是一种用于显示非常大的文本的样式。通常用于大屏幕上的重要文本或数字。
 /// displayMedium: 这是一种介于大号和小号之间的大型文本样式，也用于显示重要文本或数字。
@@ -20,10 +20,10 @@
 /// labelMedium: 这是一种用于标签文本的中型样式。
 /// labelSmall: 这是一种用于标签文本的较小样式，通常用于显示较小的标签文本。
 
-
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -62,8 +62,7 @@ class ThemeManager extends GetxController {
     int? fontSizeIndex = prefs.getInt('fontSize');
     if (fontSizeIndex != null) {
       currentFontSizeStyle = getFontSizeStyle(fontSizeIndex);
-    }
-    else{
+    } else {
       //存储默认字体大小
       saveFontSize(FontSize.standard);
     }
@@ -103,19 +102,19 @@ class ThemeManager extends GetxController {
   // 将ColorScheme对象转换为JSON字符串
   String colorSchemeToJson(ColorScheme colorScheme) {
     Map<String, dynamic> colorValues = {
-    'brightness': colorScheme.brightness.toString(), // 将Brightness枚举转换为字符串
-    'primary': colorScheme.primary.value,
-    'onPrimary': colorScheme.onPrimary.value,
-    'secondary': colorScheme.secondary.value,
-    'onSecondary': colorScheme.onSecondary.value,
-    'error': colorScheme.error.value,
-    'onError': colorScheme.onError.value,
-    'background': colorScheme.background.value,
-    'onBackground': colorScheme.onBackground.value,
-    'surface': colorScheme.surface.value,
-    'onSurface': colorScheme.onSurface.value,
-  };
-  return jsonEncode(colorValues);
+      'brightness': colorScheme.brightness.toString(), // 将Brightness枚举转换为字符串
+      'primary': colorScheme.primary.value,
+      'onPrimary': colorScheme.onPrimary.value,
+      'secondary': colorScheme.secondary.value,
+      'onSecondary': colorScheme.onSecondary.value,
+      'error': colorScheme.error.value,
+      'onError': colorScheme.onError.value,
+      'background': colorScheme.background.value,
+      'onBackground': colorScheme.onBackground.value,
+      'surface': colorScheme.surface.value,
+      'onSurface': colorScheme.onSurface.value,
+    };
+    return jsonEncode(colorValues);
   }
 
   // 将JSON字符串转换为ColorScheme对象
@@ -139,8 +138,7 @@ class ThemeManager extends GetxController {
   }
 
   //切换主题的方法
-  Future<void> updateColorScheme(bool auto,
-      {ColorScheme? colorScheme}) async {
+  Future<void> updateColorScheme(bool auto, {ColorScheme? colorScheme}) async {
     if (auto == false) {
       colorScheme ??= const ColorScheme.light(onSecondary: Colors.blue);
       String color = colorSchemeToJson(colorScheme);
@@ -165,7 +163,9 @@ class ThemeManager extends GetxController {
       }
       Get.changeTheme(ThemeData(
         colorScheme: currentColorScheme,
-        textTheme: TextTheme(labelMedium: TextStyle(fontSize: currentFontSizeStyle.subtitleFontSize)),
+        textTheme: TextTheme(
+            labelMedium:
+                TextStyle(fontSize: currentFontSizeStyle.subtitleFontSize)),
         useMaterial3: true,
         splashColor: Colors.transparent,
         highlightColor: Colors.transparent,
@@ -174,18 +174,70 @@ class ThemeManager extends GetxController {
     }
   }
 
+  DefaultChatTheme getChatTheme() {
+    return DefaultChatTheme(
+      backgroundColor: currentColorScheme.brightness == Brightness.dark ? currentColorScheme.onPrimary : currentColorScheme.onSurface.withOpacity(0.1),
+      inputBackgroundColor: currentColorScheme.onPrimary,
+      //光标
+      inputTextCursorColor: currentColorScheme.onSurface,
+      inputTextColor: currentColorScheme.onSurface,
+      primaryColor: currentColorScheme.onSecondary,
+      
+      userNameTextStyle: TextStyle(
+        fontSize: currentFontSizeStyle.contentFontSize,
+        fontWeight: FontWeight.bold,
+      ),
+      inputBorderRadius: const BorderRadius.only(
+        topLeft: Radius.circular(20),
+        topRight: Radius.circular(20),
+      ),
+      inputContainerDecoration: BoxDecoration(
+        color: currentColorScheme.onPrimary,
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(20),
+          topRight: Radius.circular(20),
+        ),
+        boxShadow: const [
+          BoxShadow(
+            color: Colors.grey,
+            offset: Offset(0, -1.5),
+            blurRadius: 4,
+          ),
+        ],
+      ),
+      receivedMessageBodyTextStyle: TextStyle(
+        color: currentColorScheme.onSurface,
+        fontSize: currentFontSizeStyle.contentFontSize,
+      ),
+      sentMessageBodyTextStyle: TextStyle(
+        color: currentColorScheme.onPrimary,
+        fontSize: currentFontSizeStyle.contentFontSize,
+      ),
+      // sentMessageBodyLinkTextStyle: TextStyle(
+      //   color: currentColorScheme.onSurface,
+      //   fontSize: currentFontSizeStyle.contentFontSize,
+      // ),
+      // receivedMessageBodyCodeTextStyle: TextStyle(
+      //   color: currentColorScheme.onPrimary,
+      //   fontSize: currentFontSizeStyle.contentFontSize,
+      // ),
+    );
+  }
+
   //切换字体大小的方法
   Future<void> updateFontSize(FontSize fontSize) async {
     currentFontSizeStyle = getFontSizeStyle(fontSize.index);
     await saveFontSize(fontSize);
     Get.changeTheme(ThemeData(
-        colorScheme: currentColorScheme,
-        textTheme: TextTheme(labelMedium: TextStyle(fontSize: currentFontSizeStyle.subtitleFontSize)),
-        useMaterial3: true,
-        splashColor: Colors.transparent,
-        highlightColor: Colors.transparent,
-        hoverColor: Colors.transparent,
-      ));
+      colorScheme: currentColorScheme,
+      textTheme: TextTheme(
+          labelMedium:
+              TextStyle(fontSize: currentFontSizeStyle.subtitleFontSize)),
+      useMaterial3: true,
+      splashColor: Colors.transparent,
+      highlightColor: Colors.transparent,
+      hoverColor: Colors.transparent,
+    ));
   }
 
   //SharedPreferencess保存主题
