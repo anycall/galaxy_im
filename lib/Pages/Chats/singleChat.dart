@@ -29,7 +29,7 @@ class SingleChatPage extends StatefulWidget {
 
 class _SingleChatPageState extends State<SingleChatPage> {
   final User _user = Get.arguments;
-
+  final GlobalKey<ChatState> _singleChatKey = GlobalKey(); //用于跳转到未读
   List<types.Message> _messages = [];
   bool _isLastPage = false;
 
@@ -63,6 +63,17 @@ class _SingleChatPageState extends State<SingleChatPage> {
         _isLastPage = true;
       }
     });
+  }
+
+  //滚动到未读消息
+  Future<void> _scrollToLastReadMessage() async {
+    if (_messages.where((e) => e.id == 'lastReadMessageId').isEmpty) {
+      await _handleEndReached();//没有未读消息，加载更多，这个待定
+    } else {
+      Future.delayed(const Duration(milliseconds: 20), () {
+        _singleChatKey.currentState?.scrollToUnreadHeader();
+      });
+    }
   }
 
   void _handleAttachmentPressed() {
@@ -245,7 +256,7 @@ class _SingleChatPageState extends State<SingleChatPage> {
     required nextMessageInGroup,
   }) {
     double padding = 0;
-    if (nextMessageInGroup){
+    if (nextMessageInGroup) {
       if (_user.id == message.author.id) {
         padding = 6;
       }
@@ -271,6 +282,7 @@ class _SingleChatPageState extends State<SingleChatPage> {
     );
   }
 
+  //头像
   Widget _avatarBuilder(
     String? url,
   ) =>
@@ -279,6 +291,11 @@ class _SingleChatPageState extends State<SingleChatPage> {
         width: 30.r,
         height: 30.r,
       );
+  //日期
+  String _dateHeaderText(DateTime dateTime) {
+    int timeStamp = dateTime.millisecondsSinceEpoch;
+    return Helper.getConversationFormatDate(timeStamp);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -292,6 +309,7 @@ class _SingleChatPageState extends State<SingleChatPage> {
         leading: WidgetFactory().buildAppBarBackButton(context),
       ),
       body: Chat(
+        key: _singleChatKey,
         messages: _messages,
         // onAttachmentPressed: _handleAttachmentPressed,
         onMessageTap: _handleMessageTap, //点击消息
@@ -303,6 +321,7 @@ class _SingleChatPageState extends State<SingleChatPage> {
         onSendPressed: _handleSendPressed, //发送消息
         avatarBuilder: _avatarBuilder, //头像
         bubbleBuilder: _bubbleBuilder, //气泡
+        customDateHeaderText: _dateHeaderText, //日期
         showUserAvatars: true,
         showUserNames: true,
         user: _user,
