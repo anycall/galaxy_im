@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:galaxy_im/Helper/LocalizationService.dart';
 import 'package:galaxy_im/Helper/ThemeManager.dart';
@@ -19,6 +20,8 @@ class Helper {
   static Color get imSurface => _themeManager.currentColorScheme.onSurface;
   ///按钮和头像
   static Color get imSecondary => _themeManager.currentColorScheme.onSecondary;
+  /// 黑夜模式 get bool
+  static bool get isDarkMode => _themeManager.currentColorScheme.brightness == Brightness.dark;
 
   ///字体大小
   ///标题
@@ -27,6 +30,8 @@ class Helper {
   static double get subtitleFontSize => _themeManager.currentFontSizeStyle.subtitleFontSize.sp;
   ///内容
   static double get contentFontSize => _themeManager.currentFontSizeStyle.contentFontSize.sp;
+  ///聊天页主题
+  static DefaultChatTheme get chatTheme => _themeManager.getChatTheme();
 
   /// 获取屏幕参数
   /// 获取屏幕高度
