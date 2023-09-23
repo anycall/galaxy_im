@@ -61,10 +61,11 @@ class XEP_Login extends XEP implements IXEP_Common {
   late Completer<bool> _successCompleter;
 
   XEP_Login(XmppClient xmppClient) : super(xmppClient) {
+    receiveHandlers.add(
+        XepMessageHandler("", "open", "", "", "", "", true, true, openHandler));
     receiveHandlers.add(XepMessageHandler(
-        "", "open", "", "", "", "", false, true, openHandler));
-    receiveHandlers.add(XepMessageHandler(
-        "", "success", "", "", "", "", false, true, successHandler));
+        "", "success", "", "", "", "", true, true, successHandler));
+    _successCompleter = Completer<bool>();
   }
 
   /// 响应<open/>节点

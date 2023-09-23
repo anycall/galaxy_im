@@ -32,6 +32,10 @@ class XmppClient extends IClientInterface {
     _xeps.addAll([xepLogin]);
 
     handlers.addAll(_xeps.mapMany((item) => item.receiveHandlers));
+
+    //打印所有的过滤器的name属性
+    var filterNames = handlers.map((e) => e.name).toList();
+    LogUtil.debug("所有的过滤器的name属性", params: [filterNames]);
   }
 
   @override
@@ -87,7 +91,7 @@ class XmppClient extends IClientInterface {
   }
 
   void wsHandleInComingMessage(String message) {
-    rawOutput(message, prefix: "ws");
+    // rawOutput(message, prefix: "ws");
 
     if (message.startsWith("<success")) {
       _loginCompleter.complete(true);
@@ -119,9 +123,12 @@ class XmppClient extends IClientInterface {
             (handler.from.isEmpty || from == handler.from) &&
             (handler.to.isEmpty || to == handler.to) &&
             (handler.type.isEmpty || type == handler.type)) {
+          LogUtil.debug("匹配上过滤器",
+              params: [xmlnsList, name, type, id, from, to, message]);
           handler.msgHandler(document!);
         } else {
-          LogUtil.debug("没有匹配上过滤器");
+          LogUtil.debug("没有匹配上过滤器",
+              params: [xmlnsList, name, type, id, from, to, message]);
         }
       }
     } else {
@@ -165,7 +172,7 @@ class XmppClient extends IClientInterface {
   }
 
   void send(String message) {
-    rawOutput(message, prefix: "xmpp");
+    // rawOutput(message, prefix: "xmpp");
     _ws.add(message);
   }
 
