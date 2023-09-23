@@ -122,7 +122,7 @@ class _ConversationsState extends State<Conversations> {
         },
         child: Padding(
           padding:
-              const EdgeInsets.only(top: 10, left: 15, right: 15, bottom: 10),
+              const EdgeInsets.only(top: 15, left: 15, right: 15, bottom: 15),
           child: RepaintBoundary(
               child: Row(
             children: [
@@ -161,7 +161,7 @@ class _ConversationsState extends State<Conversations> {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 5),
+                    const SizedBox(height: 3),
 
                     ///最后一条消息
                     Text(

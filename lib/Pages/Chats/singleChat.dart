@@ -8,7 +8,6 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:flutter_chat_types/flutter_chat_types.dart';
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
-import 'package:flutter_launcher_icons/main.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:galaxy_im/Helper/Helper.dart';
 import 'package:galaxy_im/Pages/Widget/WidgetFactory.dart';
@@ -32,6 +31,7 @@ class _SingleChatPageState extends State<SingleChatPage> {
   final User _user = Get.arguments;
 
   List<types.Message> _messages = [];
+  bool _isLastPage = false;
 
   @override
   void initState() {
@@ -39,9 +39,29 @@ class _SingleChatPageState extends State<SingleChatPage> {
     _loadMessages();
   }
 
+  //发消息
   void _addMessage(types.Message message) {
     setState(() {
       _messages.insert(0, message);
+    });
+  }
+
+  //分页
+  Future<void> _handleEndReached() async {
+    //测试数据
+    final response = await rootBundle.loadString('assets/messages.json');
+    final messages = (jsonDecode(response) as List).map((e) {
+      var message = types.Message.fromJson(e as Map<String, dynamic>);
+      message = message.copyWith(id: const Uuid().v4());
+      return message;
+    }).toList();
+
+    setState(() {
+      _messages.addAll(messages);
+      //假设100条消息为最后一页
+      if (_messages.length >= 100) {
+        _isLastPage = true;
+      }
     });
   }
 
@@ -223,28 +243,33 @@ class _SingleChatPageState extends State<SingleChatPage> {
     Widget child, {
     required message,
     required nextMessageInGroup,
-  }) =>
-      Bubble(
-        color: _user.id != message.author.id ||
-                message.type == types.MessageType.image
-            ? (Helper.isDarkMode
-                ? Helper.imSurface.withOpacity(0.2)
-                : Helper.imPrimary)
-            : Helper.imSecondary,
-        margin: nextMessageInGroup
-            ? const BubbleEdges.symmetric(horizontal: 6)
-            : null,
-        nip: nextMessageInGroup
-            ? BubbleNip.no
-            : _user.id != message.author.id
-                ? BubbleNip.leftBottom
-                : BubbleNip.rightBottom,
-        padding: message.type == types.MessageType.text
-            ? const BubbleEdges.all(0)
-            : const BubbleEdges.all(5),
-        elevation: 0,
-        child: child,
-      );
+  }) {
+    double padding = 0;
+    if (nextMessageInGroup){
+      if (_user.id == message.author.id) {
+        padding = 6;
+      }
+    }
+    return Bubble(
+      color: _user.id != message.author.id ||
+              message.type == types.MessageType.image
+          ? (Helper.isDarkMode
+              ? Helper.imSurface.withOpacity(0.2)
+              : Helper.imPrimary)
+          : Helper.imSecondary,
+      margin: BubbleEdges.symmetric(horizontal: padding),
+      nip: nextMessageInGroup
+          ? BubbleNip.no
+          : _user.id != message.author.id
+              ? BubbleNip.leftBottom
+              : BubbleNip.rightBottom,
+      padding: message.type == types.MessageType.text
+          ? const BubbleEdges.all(0)
+          : const BubbleEdges.all(5),
+      elevation: 0,
+      child: child,
+    );
+  }
 
   Widget _avatarBuilder(
     String? url,
@@ -269,12 +294,15 @@ class _SingleChatPageState extends State<SingleChatPage> {
       body: Chat(
         messages: _messages,
         // onAttachmentPressed: _handleAttachmentPressed,
-        onMessageTap: _handleMessageTap,
-        onMessageStatusTap: _handleMessageStatusTap,
-        onPreviewDataFetched: _handlePreviewDataFetched,
-        onSendPressed: _handleSendPressed,
-        avatarBuilder: _avatarBuilder,
-        bubbleBuilder: _bubbleBuilder,
+        onMessageTap: _handleMessageTap, //点击消息
+        onEndReached: _handleEndReached, //分页
+        onEndReachedThreshold: 0.1, // 分页加载阈值，0.1表示滑动到距离列表总数10%时触发
+        isLastPage: _isLastPage, //true表示最后一页,不再调用onEndReached
+        onMessageStatusTap: _handleMessageStatusTap, //点击消息状态
+        onPreviewDataFetched: _handlePreviewDataFetched, //显示连接消息的预览数据
+        onSendPressed: _handleSendPressed, //发送消息
+        avatarBuilder: _avatarBuilder, //头像
+        bubbleBuilder: _bubbleBuilder, //气泡
         showUserAvatars: true,
         showUserNames: true,
         user: _user,
