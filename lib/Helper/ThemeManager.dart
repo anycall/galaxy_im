@@ -176,13 +176,15 @@ class ThemeManager extends GetxController {
 
   DefaultChatTheme getChatTheme() {
     return DefaultChatTheme(
-      backgroundColor: currentColorScheme.brightness == Brightness.dark ? currentColorScheme.onPrimary : currentColorScheme.onSurface.withOpacity(0.1),
+      backgroundColor: currentColorScheme.brightness == Brightness.dark
+          ? currentColorScheme.onPrimary
+          : currentColorScheme.onSurface.withOpacity(0.1),
       inputBackgroundColor: currentColorScheme.onPrimary,
       //光标
       inputTextCursorColor: currentColorScheme.onSurface,
       inputTextColor: currentColorScheme.onSurface,
       primaryColor: currentColorScheme.onSecondary,
-      
+
       userNameTextStyle: TextStyle(
         fontSize: currentFontSizeStyle.contentFontSize,
         fontWeight: FontWeight.bold,
@@ -205,22 +207,70 @@ class ThemeManager extends GetxController {
           ),
         ],
       ),
-      receivedMessageBodyTextStyle: TextStyle(
-        color: currentColorScheme.onSurface,
-        fontSize: currentFontSizeStyle.contentFontSize,
-      ),
+      //信息style
       sentMessageBodyTextStyle: TextStyle(
         color: currentColorScheme.onPrimary,
         fontSize: currentFontSizeStyle.contentFontSize,
       ),
-      // sentMessageBodyLinkTextStyle: TextStyle(
-      //   color: currentColorScheme.onSurface,
-      //   fontSize: currentFontSizeStyle.contentFontSize,
-      // ),
-      // receivedMessageBodyCodeTextStyle: TextStyle(
-      //   color: currentColorScheme.onPrimary,
-      //   fontSize: currentFontSizeStyle.contentFontSize,
-      // ),
+      receivedMessageBodyTextStyle: TextStyle(
+        color: currentColorScheme.onSurface,
+        fontSize: currentFontSizeStyle.contentFontSize,
+      ),
+      //加粗信息style
+      sentMessageBodyBoldTextStyle: TextStyle(
+        color: currentColorScheme.onPrimary,
+        fontSize: currentFontSizeStyle.contentFontSize,
+        fontWeight: FontWeight.bold,
+      ),
+      receivedMessageBodyBoldTextStyle: TextStyle(
+        color: currentColorScheme.onSurface,
+        fontSize: currentFontSizeStyle.contentFontSize,
+        fontWeight: FontWeight.bold,
+      ),
+      //code信息style
+      sentMessageBodyCodeTextStyle: TextStyle(
+        color: currentColorScheme.onPrimary,
+        fontSize: currentFontSizeStyle.contentFontSize,
+      ),
+      receivedMessageBodyCodeTextStyle: TextStyle(
+        color: currentColorScheme.onSurface,
+        fontSize: currentFontSizeStyle.contentFontSize,
+      ),
+      //链接style
+      sentMessageBodyLinkTextStyle: TextStyle(
+        color: currentColorScheme.onPrimary,
+        fontSize: currentFontSizeStyle.contentFontSize,
+        decoration: TextDecoration.underline,
+        decorationColor: currentColorScheme.onPrimary,
+        decorationThickness: 0.5,
+      ),
+      receivedMessageBodyLinkTextStyle: TextStyle(
+        color: currentColorScheme.onSurface,
+        fontSize: currentFontSizeStyle.contentFontSize,
+        decoration: TextDecoration.underline,
+        decorationColor: currentColorScheme.onPrimary,
+        decorationThickness: 0.5,
+      ),
+      //链接预览title style
+      sentMessageLinkTitleTextStyle: TextStyle(
+        color: currentColorScheme.onPrimary,
+        fontSize: currentFontSizeStyle.subtitleFontSize,
+        fontWeight: FontWeight.bold,
+      ),
+      receivedMessageLinkTitleTextStyle: TextStyle(
+        color: currentColorScheme.onSurface,
+        fontSize: currentFontSizeStyle.subtitleFontSize,
+        fontWeight: FontWeight.bold,
+      ),
+      //链接预览content style
+      sentMessageLinkDescriptionTextStyle: TextStyle(
+        color: currentColorScheme.onPrimary,
+        fontSize: currentFontSizeStyle.contentFontSize,
+      ),
+      receivedMessageLinkDescriptionTextStyle: TextStyle(
+        color: currentColorScheme.onSurface,
+        fontSize: currentFontSizeStyle.contentFontSize,
+      ),
     );
   }
 
