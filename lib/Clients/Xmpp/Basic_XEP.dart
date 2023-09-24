@@ -1,8 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:galaxy_im/Clients/Xmpp/Handlers/ChatMessageHandler.dart';
+import 'package:galaxy_im/Clients/Xmpp/Handlers/XepMessageHandler.dart';
+import 'package:galaxy_im/Clients/Xmpp/Models/ChatMessage.dart';
 import 'package:galaxy_im/Clients/Xmpp/XmppClient.dart';
-import 'package:galaxy_im/Clients/Xmpp/Xmpp_Types.dart';
 import 'package:xml/xml.dart';
 import 'package:uuid/uuid.dart';
 import 'package:galaxy_im/Utils/LogUtil.dart';
@@ -68,6 +70,20 @@ class XEP_Login extends XEP implements IXEP_Common {
     _successCompleter = Completer<bool>();
   }
 
+  Future<bool> login() {
+    var userName = xmppClient.userName;
+    var password = xmppClient.password;
+    var domain = xmppClient.domain;
+    var crential = "\u0000$userName@$domain\u0000$password";
+    var base64Str = base64.encode(utf8.encode(crential));
+    LogUtil.debug(crential);
+    var openStr =
+        "<open from='$userName@$domain' to='$domain' version='1.0' xmlns='urn:ietf:params:xml:ns:xmpp-framing'/>";
+    xmppClient.send(openStr);
+    // _sendXmppMessage(openStr);
+    return _successCompleter.future;
+  }
+
   /// 响应<open/>节点
   Future<void> openHandler(XmlDocument xml) async {
     if (_hasLogin) {
@@ -126,4 +142,14 @@ class XEP_Login extends XEP implements IXEP_Common {
       // await connection.sendElement(document);
     }
   }
+}
+
+mixin BasicXEP {
+  final _chatMessageController = StreamController<XmppChatMessage>.broadcast();
+
+  void BindChatMessageStream(ChatMessageHandler handler) {
+    _chatMessageController.stream.listen(handler);
+  }
+
+  void sendPrivateMessage(String to, String message) {}
 }
