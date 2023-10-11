@@ -1,8 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart';
 import 'package:galaxy_im/Helper/Helper.dart';
 import 'package:galaxy_im/Helper/RouteManager.dart';
-import 'package:galaxy_im/Models/Conversation.dart';
+import 'package:galaxy_im/Models/JsonGenerator.dart';
 import 'package:galaxy_im/Pages/Widget/WidgetFactory.dart';
 import 'package:get/get.dart';
 import 'package:flutter_swipe_action_cell/flutter_swipe_action_cell.dart';
@@ -17,17 +19,27 @@ class Conversations extends StatefulWidget {
 
 class _ConversationsState extends State<Conversations> {
   // 会话列表数组
-  List<Conversation> conversationList = List.generate(50, (index) {
-    return Conversation(
-      id: index.toString(),
-      name: 'name$index',
-      avatar: index.toString(),
-      lastMessage: 'lastMessage$index， 哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈',
-      unreadCount: 0,
-      timestamp:
-          DateTime.now().millisecondsSinceEpoch - index * 1000 * 60 * 60 * 24,
-    );
-  });
+  List<Room> _conversations = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _loadConversations();
+  }
+
+  Future<void> _loadConversations() async {
+    JsonArrayGenerator jsonArrayGenerator = JsonArrayGenerator();
+    String randomJsonArray =
+        await jsonArrayGenerator.generateRandomConversationJsonArray(100);
+    final rooms = (jsonDecode(randomJsonArray) as List).map((e) {
+      var room = Room.fromJson(e as Map<String, dynamic>);
+      return room;
+    }).toList();
+
+    setState(() {
+      _conversations = rooms;
+    });
+  }
 
   //导航栏标题方法
   Widget _buildTitle() {
@@ -47,20 +59,14 @@ class _ConversationsState extends State<Conversations> {
 
   //删除会话
   void _deleteConversation(int index) {
-    conversationList.removeAt(index);
+    _conversations.removeAt(index);
     setState(() {});
   }
 
   //跳转到聊天页面
   void _goToChatPage(int index) {
-    Conversation model = conversationList[index];
-    User user = User(
-      id: '82091008-a484-4a89-ae75-a22bf8d6f3ac',//model.id,
-      firstName: model.name,
-      lastName: '',
-      imageUrl: model.avatar,
-    );
-    Get.toNamed(Routes.privateChat, arguments: user);
+    Room model = _conversations[index];
+    Get.toNamed(Routes.privateChat, arguments: model);
   }
 
   @override
@@ -83,7 +89,7 @@ class _ConversationsState extends State<Conversations> {
                 (BuildContext context, int index) {
                   return _buildConversationItem(index);
                 },
-                childCount: conversationList.length,
+                childCount: _conversations.length,
               ),
             ),
           ],
@@ -94,7 +100,7 @@ class _ConversationsState extends State<Conversations> {
 
   //会话item
   Widget _buildConversationItem(int index) {
-    Conversation model = conversationList[index];
+    Room model = _conversations[index];
     double avatarSize =
         (Helper.subtitleFontSize + Helper.contentFontSize + 5) * 1.4;
     return SwipeActionCell(
@@ -128,7 +134,7 @@ class _ConversationsState extends State<Conversations> {
             children: [
               ///头像
               RandomAvatar(
-                model.avatar,
+                model.users[0].id,
                 height: avatarSize,
                 width: avatarSize,
               ),
@@ -143,7 +149,7 @@ class _ConversationsState extends State<Conversations> {
                       children: [
                         Flexible(
                           child: Text(
-                            model.name,
+                            '${model.users[0].firstName} ${model.users[0].lastName}',
                             style: TextStyle(
                               fontSize: Helper.subtitleFontSize,
                               fontWeight: FontWeight.bold,
@@ -154,7 +160,7 @@ class _ConversationsState extends State<Conversations> {
                         ),
                         const SizedBox(width: 10),
                         Text(
-                          Helper.getConversationFormatDate(model.timestamp),
+                          Helper.getConversationFormatDate(model.createdAt ?? 0),
                           style: TextStyle(
                               fontSize: Helper.contentFontSize,
                               color: Colors.grey),
@@ -165,7 +171,7 @@ class _ConversationsState extends State<Conversations> {
 
                     ///最后一条消息
                     Text(
-                      model.lastMessage,
+                      _getLastMessageContent(model),
                       style: TextStyle(
                           fontSize: Helper.contentFontSize, color: Colors.grey),
                       maxLines: 1,
@@ -179,5 +185,27 @@ class _ConversationsState extends State<Conversations> {
         ),
       ),
     );
+  }
+
+  String _getLastMessageContent (Room room){
+    if (room.lastMessages == null || room.lastMessages!.isEmpty) {
+      return '';
+    }
+    final lastMessage = room.lastMessages!.last;
+    switch (lastMessage.type) {
+      case MessageType.audio:
+        return '[${'audio'.tr}]';
+      case MessageType.file:
+        return '[${'file'.tr}]';
+      case MessageType.image:
+        return '[${'image'.tr}]';
+      case MessageType.text:
+        TextMessage textMessage = lastMessage as TextMessage;
+        return textMessage.text;
+      case MessageType.video:
+        return '[${'video'.tr}]';
+      default:
+        return '';
+    }
   }
 }

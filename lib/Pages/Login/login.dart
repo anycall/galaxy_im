@@ -41,6 +41,12 @@ class _LoginPageState extends State<LoginPage> with RestorationMixin {
 
   //登录
   void _login() async {
+    await Future.delayed(const Duration(seconds: 1));
+    _btnController.success();
+    await Future.delayed(const Duration(seconds: 1));
+    Get.offNamed(Routes.home);
+    return;
+
     final form = _formKey.currentState!;
     if (!form.validate()) {
       _autoValidateModeIndex.value = AutovalidateMode.always.index;

@@ -6,7 +6,6 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
-import 'package:flutter_chat_types/flutter_chat_types.dart';
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:galaxy_im/Helper/Helper.dart';
@@ -28,7 +27,13 @@ class SingleChatPage extends StatefulWidget {
 }
 
 class _SingleChatPageState extends State<SingleChatPage> {
-  final User _user = Get.arguments;
+  final types.Room _room = Get.arguments;
+  final types.User _user = const types.User(
+    id: '82091008-a484-4a89-ae75-a22bf8d6f3ac', //model.id,
+      firstName: 'Galaxy', 
+      lastName: 'G',
+      imageUrl: '82091008-a484-4a89-ae75-a22bf8d6f3ac',
+  );
   final GlobalKey<ChatState> _singleChatKey = GlobalKey(); //用于跳转到未读
   List<types.Message> _messages = [];
   bool _isLastPage = false;

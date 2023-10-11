@@ -17,5 +17,9 @@
     "language": "Language",
     "delete": "Delete",
     "deleteChat": "Delete chat",
-    "yesterday": "Yesterday"
+    "yesterday": "Yesterday",
+    "audio": "Audio",
+    "video": "Video",
+    "photo": "Photo",
+    "file": "File"
 }
