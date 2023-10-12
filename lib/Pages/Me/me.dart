@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:galaxy_im/Helper/Helper.dart';
 import 'package:galaxy_im/Helper/RouteManager.dart';
 import 'package:galaxy_im/Pages/Widget/WidgetFactory.dart';
+import 'package:galaxy_im/Pages/Widget/random_avatar.dart';
 import 'package:get/get.dart';
-import 'package:random_avatar/random_avatar.dart';
 
 class Me extends StatefulWidget {
   const Me({super.key});

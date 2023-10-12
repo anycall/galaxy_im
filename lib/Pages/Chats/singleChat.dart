@@ -10,12 +10,12 @@ import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:galaxy_im/Helper/Helper.dart';
 import 'package:galaxy_im/Pages/Widget/WidgetFactory.dart';
+import 'package:galaxy_im/Pages/Widget/random_avatar.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mime/mime.dart';
 import 'package:open_filex/open_filex.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:random_avatar/random_avatar.dart';
 import 'package:uuid/uuid.dart';
 import 'package:http/http.dart' as http;
 

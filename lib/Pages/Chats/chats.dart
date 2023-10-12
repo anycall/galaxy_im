@@ -6,9 +6,9 @@ import 'package:galaxy_im/Helper/Helper.dart';
 import 'package:galaxy_im/Helper/RouteManager.dart';
 import 'package:galaxy_im/Models/JsonGenerator.dart';
 import 'package:galaxy_im/Pages/Widget/WidgetFactory.dart';
+import 'package:galaxy_im/Pages/Widget/random_avatar.dart';
 import 'package:get/get.dart';
 import 'package:flutter_swipe_action_cell/flutter_swipe_action_cell.dart';
-import 'package:random_avatar/random_avatar.dart';
 
 class Conversations extends StatefulWidget {
   const Conversations({super.key});

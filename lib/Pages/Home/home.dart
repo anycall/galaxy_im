@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:galaxy_im/Helper/RouteManager.dart';
-import 'package:galaxy_im/Pages/Chats/chats.dart';
-import 'package:galaxy_im/Pages/Contacts/contacts.dart';
+import 'package:galaxy_im/Pages/Chats/Chats.dart';
+import 'package:galaxy_im/Pages/Contacts/Contacts.dart';
 import 'package:galaxy_im/Pages/Me/me.dart';
 import 'package:get/get.dart';
 import 'package:badges/badges.dart' as BDG;

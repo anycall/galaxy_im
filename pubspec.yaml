@@ -46,7 +46,6 @@ dependencies:
   logger: ^2.0.2
   uuid: ^4.0.0
   rounded_loading_button: ^2.1.0
-  random_avatar: ^0.0.8
   flutter_swipe_action_cell: ^3.1.2
   flutter_chat_ui: ^1.6.9
   flutter_chat_types: ^3.6.2
@@ -62,6 +61,8 @@ dependencies:
   sqlite3_flutter_libs: ^0.5.0
   path: ^1.8.3
   faker: ^2.1.0
+  crypto: ^3.0.3
+  flutter_svg: ^2.0.7
 
 dev_dependencies:
   flutter_test:
