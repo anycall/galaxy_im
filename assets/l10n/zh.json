@@ -22,5 +22,8 @@
     "audio": "语音",
     "video": "视频",
     "photo": "图片",
-    "file": "文件"
+    "file": "文件",
+    "newFriend": "新的朋友",
+    "group": "群组",
+    "search": "搜索"
 }

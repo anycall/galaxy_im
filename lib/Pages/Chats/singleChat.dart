@@ -11,6 +11,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:galaxy_im/Helper/Helper.dart';
 import 'package:galaxy_im/Pages/Widget/WidgetFactory.dart';
 import 'package:galaxy_im/Pages/Widget/random_avatar.dart';
+import 'package:galaxy_im/Utils/LogUtil.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mime/mime.dart';
@@ -252,7 +253,7 @@ class _SingleChatPageState extends State<SingleChatPage> {
   }
 
   void _handleMessageStatusTap(BuildContext _, types.Message message) async {
-    print('Message status tapped: ${message.status}');
+    LogUtil.debug('Message status tapped: ${message.status}');
   }
 
   Widget _bubbleBuilder(

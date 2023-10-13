@@ -9,7 +9,7 @@ class JsonArrayGenerator {
   final Faker _faker = Faker();
   final Uuid _uuid = const Uuid();
 
-  String generateRandomUserJsonArray(int numberOfObjects) {
+  String generateRandomUserJsonArray(int numberOfObjects, {String? subscription = 'both'}) {
     List<Map<String, dynamic>> jsonArray = [];
 
     for (int i = 0; i < numberOfObjects; i++) {
@@ -25,7 +25,7 @@ class JsonArrayGenerator {
         "lastName": lastName,
         "lastSeen": DateTime.now().millisecondsSinceEpoch,
         "metadata": {
-          "subscription": 'both', //订阅类型
+          "subscription": subscription, //订阅类型
         },
         "role": "user", //Role { admin, agent, moderator, user }
         "updatedAt": DateTime.now().millisecondsSinceEpoch,

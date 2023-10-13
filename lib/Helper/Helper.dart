@@ -44,8 +44,11 @@ class Helper {
   static double get topBarHeight => kToolbarHeight + ScreenUtil().statusBarHeight;
   ///顶部状态栏高度（包含安全区）
   static double get topSafeHeight => ScreenUtil().statusBarHeight;
+  ///底部导航栏高度
+  static double get bottomBarHeight => kBottomNavigationBarHeight + ScreenUtil().bottomBarHeight;
   ///底部状态栏高度（包含安全区）
   static double get bottomSafeHeight => ScreenUtil().bottomBarHeight;
+
 
   ///日期
   ///获取当前时间戳

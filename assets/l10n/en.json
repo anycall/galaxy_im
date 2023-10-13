@@ -21,5 +21,8 @@
     "audio": "Audio",
     "video": "Video",
     "photo": "Photo",
-    "file": "File"
+    "file": "File",
+    "newFriend": "New friend",
+    "group": "Group",
+    "search": "Search"
 }
