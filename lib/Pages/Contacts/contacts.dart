@@ -1,13 +1,22 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_chat_types/flutter_chat_types.dart';
 import 'package:galaxy_im/Helper/Helper.dart';
+import 'package:galaxy_im/Models/ContactModel.dart';
 import 'package:galaxy_im/Models/JsonGenerator.dart';
+import 'package:galaxy_im/Pages/Contacts/Widget/ContactsWidget.dart';
 import 'package:galaxy_im/Pages/Widget/WidgetFactory.dart';
-import 'package:galaxy_im/Utils/LogUtil.dart';
+import 'package:galaxy_im/Pages/Widget/azlistview/azlistview.dart';
+import 'package:galaxy_im/Pages/Widget/material_floating_search_bar_2/material_floating_search_bar_2.dart';
+import 'package:galaxy_im/Pages/Widget/scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:get/get.dart';
-import 'package:material_floating_search_bar_2/material_floating_search_bar_2.dart';
+import 'package:implicitly_animated_reorderable_list_2/implicitly_animated_reorderable_list_2.dart';
+import 'package:implicitly_animated_reorderable_list_2/transitions.dart';
+import 'package:lpinyin/lpinyin.dart';
 
 //搜索框高度 55
-const double kSearchBarHeight = 55;
+const double kSearchBarHeight = 50;
 
 class Contacts extends StatefulWidget {
   const Contacts({super.key});
@@ -17,35 +26,93 @@ class Contacts extends StatefulWidget {
 }
 
 class _ContactsState extends State<Contacts> {
-  final ScrollController _scrollController = ScrollController();
+  final ItemPositionsListener itemPositionsListener =
+      ItemPositionsListener.create();
   final FloatingSearchBarController _searchBarController =
       FloatingSearchBarController();
   bool showAppBarLine = false;
+  List<ContactModel> _topList = [];
+  List<ContactModel> _contactList = [];
+  List<User> _searchList = [];
+  List<ContactModel> _AllList = [];
 
   @override
   void initState() {
     super.initState();
     _loadUsers();
-    _scrollController.addListener(_onScroll);
+    itemPositionsListener.itemPositions.addListener(_onScroll);
   }
 
   void _onScroll() {
-    if (_scrollController.offset > kSearchBarHeight && !showAppBarLine) {
+    bool newfrienCellIsVisible = false;
+    for (var element in itemPositionsListener.itemPositions.value) {
+      if (element.index == 0) {
+        newfrienCellIsVisible = true;
+        break; // 当满足条件时跳出循环
+      }
+    }
+    if (!newfrienCellIsVisible && !showAppBarLine) {
       setState(() {
+        _searchBarController.hide();
         showAppBarLine = true;
       });
-    } else if (_scrollController.offset <= kSearchBarHeight && showAppBarLine) {
+    } else if (newfrienCellIsVisible && showAppBarLine) {
       setState(() {
         showAppBarLine = false;
+        _searchBarController.show();
       });
     }
   }
 
   void _loadUsers() {
     JsonArrayGenerator jsonArrayGenerator = JsonArrayGenerator();
-    String randomJsonArray = jsonArrayGenerator.generateRandomUserJsonArray(10);
+    String randomJsonArray =
+        jsonArrayGenerator.generateRandomUserJsonArray(100);
+    final contacts = (jsonDecode(randomJsonArray) as List).map((e) {
+      var user = User.fromJson(e as Map<String, dynamic>);
+      return user;
+    }).toList();
+    _sortContactList(contacts);
 
-    setState(() {});
+    ContactModel newFriendItem = ContactModel(
+      name: 'newFriend'.tr,
+      tagIndex: '↑',
+    );
+    ContactModel groupItem = ContactModel(
+      name: 'group'.tr,
+      tagIndex: '↑',
+    );
+    List<ContactModel> topList = [newFriendItem, groupItem];
+
+    setState(() {
+      _topList = topList;
+      _AllList = _topList + _contactList;
+    });
+  }
+
+  void _sortContactList(List<User> list) {
+    if (list.isEmpty) return;
+    _contactList.clear();
+    for (int i = 0, length = list.length; i < length; i++) {
+      User user = list[i];
+      String? firstName = user.firstName; // 可能为null的firstName
+      String? lastName = user.lastName; // 可能为null的lastName
+      ContactModel contactModel = ContactModel(
+          name: '${firstName ?? ''} ${lastName ?? ''}', user: user);
+      String pinyin = PinyinHelper.getPinyinE(contactModel.name);
+      String tag = pinyin.substring(0, 1).toUpperCase();
+      contactModel.namePinyin = pinyin;
+      if (RegExp("[A-Z]").hasMatch(tag)) {
+        contactModel.tagIndex = tag;
+      } else {
+        contactModel.tagIndex = "#";
+      }
+      _contactList.add(contactModel);
+    }
+    // A-Z sort.
+    SuspensionUtil.sortListBySuspensionTag(_contactList);
+    // show sus tag.
+    SuspensionUtil.setShowSuspensionStatus(_contactList);
   }
 
   @override
@@ -55,59 +122,17 @@ class _ContactsState extends State<Contacts> {
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.onPrimary,
         scrolledUnderElevation: 0,
-        bottom: showAppBarLine ? WidgetFactory().buildAppBarLine() : null,
+        bottom: showAppBarLine ? WidgetFactory.buildAppBarLine() : null,
         title: Text(
           'contacts'.tr,
           style: TextStyle(fontSize: Helper.titleFontSize),
         ),
       ),
-      body: _buildBody(),
-    );
-  }
-
-  Widget _buildBody() {
-    return CustomScrollView(
-      controller: _scrollController,
-      physics: _searchBarController.isOpen
-          ? const NeverScrollableScrollPhysics()
-          : const ClampingScrollPhysics(),
-      slivers: [
-        SliverToBoxAdapter(
-          child: GestureDetector(
-            onTap: () {},
-            child: Container(
-              margin: const EdgeInsets.only(left: 15, right: 15),
-              width: Helper.screenWidth,
-              height: _searchBarController.isOpen
-                  ? Helper.screenHeight -
-                      Helper.topBarHeight -
-                      Helper.bottomBarHeight
-                  : kSearchBarHeight,
-              //搜索框
-              child: buildSearchBar(),
-            ),
-          ),
-        ),
-        SliverToBoxAdapter(
-          child: Container(
-            height: 0.25, // 设置线的高度
-            color: Colors.grey, // 设置线的颜色
-          ),
-        ),
-        SliverList(
-            delegate: SliverChildBuilderDelegate((context, index) {
-          return Container(
-            color: Helper.imPrimary,
-            height: 44,
-          );
-        }, childCount: 50)),
-      ],
+      body: buildSearchBar(),
     );
   }
 
   Widget buildSearchBar() {
-    LogUtil.debug(
-        '${_searchBarController.isOpen}----${_searchBarController.isVisible}');
     final List<FloatingSearchBarAction> actions = <FloatingSearchBarAction>[
       FloatingSearchBarAction.back(
         showIfClosed: false,
@@ -119,18 +144,22 @@ class _ContactsState extends State<Contacts> {
 
     return FloatingSearchBar(
       backdropColor: Helper.imPrimary,
+      backgroundColor: Helper.imPrimary,
       height: 40,
       elevation: 0,
-      margins: EdgeInsets.zero,
+      margins: const EdgeInsets.only(left: 15, right: 15, bottom: 10),
       padding: EdgeInsets.zero,
       insets: EdgeInsets.zero,
       automaticallyImplyBackButton: false,
+      automaticallyImplyDrawerHamburger: false,
+      closeOnBackdropTap: false,
       controller: _searchBarController,
       iconColor: Colors.grey,
       border: const BorderSide(
         color: Colors.grey,
         width: 0.25,
       ),
+      borderRadius: const BorderRadius.all(Radius.circular(8)),
       hint: 'search'.tr,
       accentColor: Helper.imSurface,
       hintStyle: TextStyle(
@@ -162,7 +191,6 @@ class _ContactsState extends State<Contacts> {
       ],
       transitionDuration: const Duration(milliseconds: 700),
       transitionCurve: Curves.easeInOutCubic,
-      physics: const NeverScrollableScrollPhysics(),
       axisAlignment: isPortrait ? 0.0 : -1.0,
       actions: actions,
       scrollPadding: EdgeInsets.zero,
@@ -171,26 +199,94 @@ class _ContactsState extends State<Contacts> {
         setState(() {});
       },
       builder: (BuildContext context, _) => _buildSearchBody(),
+      body: _buildBody(),
+    );
+  }
+
+  Widget _buildBody() {
+    return AzListView(
+      padding: const EdgeInsets.only(top: kSearchBarHeight),
+      itemPositionsListener: itemPositionsListener,
+      data: _AllList,
+      itemCount: _AllList.length,
+      itemBuilder: (BuildContext context, int index) {
+        ContactModel model = _AllList[index];
+        if (index == 0){
+          return TopCell(height: Helper.contentFontSize * 2 + 30, iconData: Icons.notification_add , title: model.name, isLast: false);
+        }
+        else if (index == 1){
+          return TopCell(height: Helper.contentFontSize * 2 + 30, iconData: Icons.groups , title: model.name, isLast: index == _AllList.length - 1 ? true : false);
+        }
+        return UserCell(height: Helper.contentFontSize * 2 + 30, avatarUrl: model.user!.id, name: model.name, isLast: index == _AllList.length - 1 ? true : false);
+      },
+      physics: const ClampingScrollPhysics(),
+      susItemBuilder: (BuildContext context, int index) {
+        ContactModel model = _AllList[index];
+        if ('↑' == model.getSuspensionTag()) {
+          return Container();
+        }
+        return IndexHeader(indexLetter: model.getSuspensionTag()); 
+      },
+      indexBarData: const ['↑', ...kIndexBarData],
+      indexBarOptions: const IndexBarOptions(
+        needRebuild: true,
+        // ignoreDragCancel: true,
+        selectTextStyle: TextStyle(
+            fontSize: 12, color: Colors.white, fontWeight: FontWeight.w500),
+        selectItemDecoration:
+            BoxDecoration(shape: BoxShape.circle, color: Color(0xFF333333)),
+        indexHintWidth: 120 / 2,
+        indexHintHeight: 100 / 2,
+        indexHintDecoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/image/index_bar_bubble_gray.png'),
+            fit: BoxFit.contain,
+          ),
+        ),
+        indexHintAlignment: Alignment.centerRight,
+        indexHintChildAlignment: Alignment(-0.25, 0.0),
+        indexHintOffset: Offset(-20, 0),
+      ),
     );
   }
 
   Widget _buildSearchBody() {
     return Container(
-      margin: EdgeInsets.only(top: 15),
-      color: Colors.white,
-      height: Helper.screenHeight -
-          Helper.topBarHeight -
-          Helper.bottomBarHeight -
-          kSearchBarHeight,
-      child: ListView.builder(
-          itemBuilder: (context, index) {
-            return Container(
-              color: Colors.white,
-              height: 44,
-              child: Text('test $index'),
+      padding: const EdgeInsets.symmetric(vertical: 16),
+      child: Material(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(8),
+        clipBehavior: Clip.antiAlias,
+        child: ImplicitlyAnimatedList<ContactModel>(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          items: _contactList,
+          insertDuration: const Duration(milliseconds: 700),
+          itemBuilder: (BuildContext context, Animation<double> animation,
+              ContactModel item, _) {
+            return SizeFadeTransition(
+              animation: animation,
+              child: buildItem(context, item),
             );
           },
-          itemCount: 100),
+          updateItemBuilder: (BuildContext context, Animation<double> animation,
+              ContactModel item) {
+            return FadeTransition(
+              opacity: animation,
+              child: buildItem(context, item),
+            );
+          },
+          areItemsTheSame: (ContactModel a, ContactModel b) => a == b,
+        ),
+      ),
+    );
+  }
+
+  Widget buildItem(BuildContext context, ContactModel item) {
+    return Container(
+      color: Colors.white,
+      height: 44,
+      child: Text(item.name),
     );
   }
 }

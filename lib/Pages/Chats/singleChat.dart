@@ -28,7 +28,7 @@ class SingleChatPage extends StatefulWidget {
 }
 
 class _SingleChatPageState extends State<SingleChatPage> {
-  final types.Room _room = Get.arguments;
+  final types.Room _room = Get.arguments; //会话信息，等数据接入从里边获取下方的User或者给User赋值
   final types.User _user = const types.User(
     id: '82091008-a484-4a89-ae75-a22bf8d6f3ac', //model.id,
       firstName: 'Galaxy', 
@@ -310,9 +310,9 @@ class _SingleChatPageState extends State<SingleChatPage> {
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.onPrimary,
         scrolledUnderElevation: 0,
-        bottom: WidgetFactory().buildAppBarLine(),
+        bottom: WidgetFactory.buildAppBarLine(),
         title: Text('单聊'),
-        leading: WidgetFactory().buildAppBarBackButton(context),
+        leading: WidgetFactory.buildAppBarBackButton(context),
       ),
       body: Chat(
         key: _singleChatKey,

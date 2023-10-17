@@ -18,12 +18,12 @@ class _FontPageState extends State<FontPage> {
       backgroundColor: Theme.of(context).colorScheme.onPrimary,
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.onPrimary,
-        bottom: WidgetFactory().buildAppBarLine(),
+        bottom: WidgetFactory.buildAppBarLine(),
         title: Text(
           'font'.tr,
           style: TextStyle(fontSize: Helper.titleFontSize),
         ),
-        leading: WidgetFactory().buildAppBarBackButton(context),
+        leading: WidgetFactory.buildAppBarBackButton(context),
       ),
       body: Center(
         child: Column(

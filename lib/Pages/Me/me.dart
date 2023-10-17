@@ -19,7 +19,7 @@ class _MeState extends State<Me> {
       backgroundColor: Theme.of(context).colorScheme.onPrimary,
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.onPrimary,
-        bottom: WidgetFactory().buildAppBarLine(),
+        bottom: WidgetFactory.buildAppBarLine(),
         title: Text(
           'me'.tr,
           style: TextStyle(fontSize: Helper.titleFontSize),
