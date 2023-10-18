@@ -116,7 +116,6 @@ class UserCell extends StatelessWidget {
                       color: Helper.imSurface),
                 ),
               ),
-              //q:上边的Text由于字符串太长越界了，怎么办？
             ],
           ),
         ),
@@ -124,7 +123,7 @@ class UserCell extends StatelessWidget {
             ? Container()
             : Padding(
                 padding:
-                    EdgeInsets.only(left: isLast ? 0 : height + 15, right: 25),
+                    EdgeInsets.only(left: isLast ? 0 : height + 15),
                 child: WidgetFactory.buildLine(),
               ),
       ],

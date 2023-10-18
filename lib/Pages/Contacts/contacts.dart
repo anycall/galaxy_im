@@ -159,7 +159,7 @@ class _ContactsState extends State<Contacts> {
         color: Colors.grey,
         width: 0.25,
       ),
-      borderRadius: const BorderRadius.all(Radius.circular(8)),
+      borderRadius: const BorderRadius.all(Radius.circular(3)),
       hint: 'search'.tr,
       accentColor: Helper.imSurface,
       hintStyle: TextStyle(
@@ -230,11 +230,10 @@ class _ContactsState extends State<Contacts> {
       indexBarData: const ['↑', ...kIndexBarData],
       indexBarOptions: const IndexBarOptions(
         needRebuild: true,
-        // ignoreDragCancel: true,
         selectTextStyle: TextStyle(
             fontSize: 12, color: Colors.white, fontWeight: FontWeight.w500),
         selectItemDecoration:
-            BoxDecoration(shape: BoxShape.circle, color: Color(0xFF333333)),
+            BoxDecoration(shape: BoxShape.circle, color: Colors.grey ),
         indexHintWidth: 120 / 2,
         indexHintHeight: 100 / 2,
         indexHintDecoration: BoxDecoration(

@@ -434,7 +434,9 @@ class _IndexBarState extends State<IndexBar> {
         color: textStyle?.color,
       );
     } else {
-      child = Text('$tag', style: textStyle);
+      child = Transform.translate(
+        offset: const Offset(0.25, -1),
+        child: Text(tag, style: textStyle, textAlign: TextAlign.center,));
     }
 
     return Container(
