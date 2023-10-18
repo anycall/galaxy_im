@@ -15,7 +15,7 @@ import 'package:implicitly_animated_reorderable_list_2/implicitly_animated_reord
 import 'package:implicitly_animated_reorderable_list_2/transitions.dart';
 import 'package:lpinyin/lpinyin.dart';
 
-//搜索框高度 55
+//搜索框高度 
 const double kSearchBarHeight = 50;
 
 class Contacts extends StatefulWidget {
@@ -195,9 +195,9 @@ class _ContactsState extends State<Contacts> {
       actions: actions,
       scrollPadding: EdgeInsets.zero,
       transition: SlideFadeFloatingSearchBarTransition(),
-      onFocusChanged: (isFocused) {
-        setState(() {});
-      },
+      // onFocusChanged: (isFocused) {
+      //   setState(() {});
+      // },
       builder: (BuildContext context, _) => _buildSearchBody(),
       body: _buildBody(),
     );
@@ -250,6 +250,9 @@ class _ContactsState extends State<Contacts> {
   }
 
   Widget _buildSearchBody() {
+    if(_searchList.isEmpty){
+      return WidgetFactory.buildSearchNoResult();
+    }
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 16),
       child: Material(
@@ -258,7 +261,7 @@ class _ContactsState extends State<Contacts> {
         clipBehavior: Clip.antiAlias,
         child: ImplicitlyAnimatedList<ContactModel>(
           shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
+          physics: const ClampingScrollPhysics(),
           items: _contactList,
           insertDuration: const Duration(milliseconds: 700),
           itemBuilder: (BuildContext context, Animation<double> animation,
@@ -288,4 +291,5 @@ class _ContactsState extends State<Contacts> {
       child: Text(item.name),
     );
   }
+
 }

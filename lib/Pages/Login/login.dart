@@ -121,7 +121,6 @@ class _LoginPageState extends State<LoginPage> with RestorationMixin {
                         textCapitalization: TextCapitalization.words,
                         textAlignVertical: TextAlignVertical.center,
                         style: TextStyle(fontSize: Helper.contentFontSize),
-                        cursorColor: Helper.imSurface,
                         decoration: InputDecoration(
                           filled: true,
                           floatingLabelStyle:
@@ -155,7 +154,6 @@ class _LoginPageState extends State<LoginPage> with RestorationMixin {
                         textCapitalization: TextCapitalization.words,
                         textAlignVertical: TextAlignVertical.center,
                         style: TextStyle(fontSize: Helper.contentFontSize),
-                        cursorColor: Helper.imSurface,
                         obscureText: _obscureText,
                         decoration: InputDecoration(
                           filled: true,

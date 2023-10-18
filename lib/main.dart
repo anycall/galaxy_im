@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -29,6 +30,14 @@ class MyApp extends StatelessWidget {
         title: 'Galaxy IM',
         theme: ThemeData(
           colorScheme: Helper.themeManager.currentColorScheme,
+          textSelectionTheme: TextSelectionThemeData(
+            selectionColor: Colors.grey,
+            cursorColor: Helper.imSurface,
+            selectionHandleColor: Helper.imSurface
+          ),
+          cupertinoOverrideTheme: CupertinoThemeData(
+            primaryColor: Helper.imSurface,
+          ),
           textTheme: TextTheme(labelMedium: TextStyle(fontSize: Helper.themeManager.currentFontSizeStyle.subtitleFontSize)),
           useMaterial3: true,
           splashColor: Colors.transparent,

@@ -26,5 +26,6 @@
     "newFriend": "新的朋友",
     "group": "群组",
     "search": "搜索",
-    "contactsBottomTips": "关注了XXX人"
+    "contactsBottomTips": "关注了XXX人",
+    "noSearchResults": "没有找到符合条件的结果"
 }

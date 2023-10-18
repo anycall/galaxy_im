@@ -25,6 +25,6 @@
     "newFriend": "New friend",
     "group": "Group",
     "search": "Search",
-    "contactsBottomTips": "Followed XXX people"
-
+    "contactsBottomTips": "Followed XXX people",
+    "noSearchResults": "No matching results found"
 }
