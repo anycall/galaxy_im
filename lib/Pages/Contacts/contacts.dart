@@ -11,8 +11,6 @@ import 'package:galaxy_im/Pages/Widget/azlistview/azlistview.dart';
 import 'package:galaxy_im/Pages/Widget/material_floating_search_bar_2/material_floating_search_bar_2.dart';
 import 'package:galaxy_im/Pages/Widget/scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:get/get.dart';
-import 'package:implicitly_animated_reorderable_list_2/implicitly_animated_reorderable_list_2.dart';
-import 'package:implicitly_animated_reorderable_list_2/transitions.dart';
 import 'package:lpinyin/lpinyin.dart';
 
 //搜索框高度 
@@ -31,16 +29,29 @@ class _ContactsState extends State<Contacts> {
   final FloatingSearchBarController _searchBarController =
       FloatingSearchBarController();
   bool showAppBarLine = false;
-  List<ContactModel> _topList = [];
-  List<ContactModel> _contactList = [];
-  List<User> _searchList = [];
-  List<ContactModel> _AllList = [];
+  final List<ContactModel> _topList = [];
+  final List<ContactModel> _contactList = [];
+  List<ContactModel> _allList = [];
+  final GlobalKey<SearchResultsState> searchResultsKey = GlobalKey<SearchResultsState>();
+
 
   @override
   void initState() {
     super.initState();
+    _loadTops();
     _loadUsers();
     itemPositionsListener.itemPositions.addListener(_onScroll);
+  }
+
+  @override
+  void dispose() {
+    itemPositionsListener.itemPositions.removeListener(_onScroll);
+    super.dispose();
+  }
+
+  //点击空搜索结果背景
+  void _onEmptySearchResultTap() {
+    _searchBarController.close();
   }
 
   void _onScroll() {
@@ -48,7 +59,7 @@ class _ContactsState extends State<Contacts> {
     for (var element in itemPositionsListener.itemPositions.value) {
       if (element.index == 0) {
         newfrienCellIsVisible = true;
-        break; // 当满足条件时跳出循环
+        break; 
       }
     }
     if (!newfrienCellIsVisible && !showAppBarLine) {
@@ -64,6 +75,20 @@ class _ContactsState extends State<Contacts> {
     }
   }
 
+  void _loadTops() {
+    _topList.clear();
+    ContactModel newFriendItem = ContactModel(
+      name: 'newFriend'.tr,
+      tagIndex: '↑',
+    );
+    _topList.add(newFriendItem);
+    ContactModel groupItem = ContactModel(
+      name: 'group'.tr,
+      tagIndex: '↑',
+    );
+    _topList.add(groupItem);
+  }
+
   void _loadUsers() {
     JsonArrayGenerator jsonArrayGenerator = JsonArrayGenerator();
     String randomJsonArray =
@@ -74,19 +99,8 @@ class _ContactsState extends State<Contacts> {
     }).toList();
     _sortContactList(contacts);
 
-    ContactModel newFriendItem = ContactModel(
-      name: 'newFriend'.tr,
-      tagIndex: '↑',
-    );
-    ContactModel groupItem = ContactModel(
-      name: 'group'.tr,
-      tagIndex: '↑',
-    );
-    List<ContactModel> topList = [newFriendItem, groupItem];
-
     setState(() {
-      _topList = topList;
-      _AllList = _topList + _contactList;
+      _allList = _topList + _contactList;
     });
   }
 
@@ -113,6 +127,20 @@ class _ContactsState extends State<Contacts> {
     SuspensionUtil.sortListBySuspensionTag(_contactList);
     // show sus tag.
     SuspensionUtil.setShowSuspensionStatus(_contactList);
+  }
+
+  //搜索数据
+  void _filterData(String filterStr) {
+    List<ContactModel> searchList = [];
+    for (int i = 0, length = _contactList.length; i < length; i++) {
+      ContactModel contactModel = _contactList[i];
+      //不区分大小写比较
+      if (contactModel.namePinyin!.toLowerCase().contains(filterStr.toLowerCase()) ||
+          contactModel.name.toLowerCase().contains(filterStr.toLowerCase())) {
+        searchList.add(contactModel);
+      }
+    }
+    searchResultsKey.currentState?.updateSearchResults(searchList, filterStr);
   }
 
   @override
@@ -194,10 +222,11 @@ class _ContactsState extends State<Contacts> {
       axisAlignment: isPortrait ? 0.0 : -1.0,
       actions: actions,
       scrollPadding: EdgeInsets.zero,
+      isScrollControlled: true,
       transition: SlideFadeFloatingSearchBarTransition(),
-      // onFocusChanged: (isFocused) {
-      //   setState(() {});
-      // },
+      onQueryChanged:(query) {
+        _filterData(query);
+      },
       builder: (BuildContext context, _) => _buildSearchBody(),
       body: _buildBody(),
     );
@@ -207,21 +236,21 @@ class _ContactsState extends State<Contacts> {
     return AzListView(
       padding: const EdgeInsets.only(top: kSearchBarHeight),
       itemPositionsListener: itemPositionsListener,
-      data: _AllList,
-      itemCount: _AllList.length,
+      data: _allList,
+      itemCount: _allList.length,
       itemBuilder: (BuildContext context, int index) {
-        ContactModel model = _AllList[index];
+        ContactModel model = _allList[index];
         if (index == 0){
           return TopCell(height: Helper.contentFontSize * 2 + 30, iconData: Icons.notification_add , title: model.name, isLast: false);
         }
         else if (index == 1){
-          return TopCell(height: Helper.contentFontSize * 2 + 30, iconData: Icons.groups , title: model.name, isLast: index == _AllList.length - 1 ? true : false);
+          return TopCell(height: Helper.contentFontSize * 2 + 30, iconData: Icons.groups , title: model.name, isLast: index == _allList.length - 1 ? true : false);
         }
-        return UserCell(height: Helper.contentFontSize * 2 + 30, avatarUrl: model.user!.id, name: model.name, isLast: index == _AllList.length - 1 ? true : false);
+        return UserCell(height: Helper.contentFontSize * 2 + 30, userId: model.user!.id, name: model.name, isLast: index == _allList.length - 1 ? true : false);
       },
       physics: const ClampingScrollPhysics(),
       susItemBuilder: (BuildContext context, int index) {
-        ContactModel model = _AllList[index];
+        ContactModel model = _allList[index];
         if ('↑' == model.getSuspensionTag()) {
           return Container();
         }
@@ -250,45 +279,9 @@ class _ContactsState extends State<Contacts> {
   }
 
   Widget _buildSearchBody() {
-    if(_searchList.isEmpty){
-      return WidgetFactory.buildSearchNoResult();
-    }
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 16),
-      child: Material(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(8),
-        clipBehavior: Clip.antiAlias,
-        child: ImplicitlyAnimatedList<ContactModel>(
-          shrinkWrap: true,
-          physics: const ClampingScrollPhysics(),
-          items: _contactList,
-          insertDuration: const Duration(milliseconds: 700),
-          itemBuilder: (BuildContext context, Animation<double> animation,
-              ContactModel item, _) {
-            return SizeFadeTransition(
-              animation: animation,
-              child: buildItem(context, item),
-            );
-          },
-          updateItemBuilder: (BuildContext context, Animation<double> animation,
-              ContactModel item) {
-            return FadeTransition(
-              opacity: animation,
-              child: buildItem(context, item),
-            );
-          },
-          areItemsTheSame: (ContactModel a, ContactModel b) => a == b,
-        ),
-      ),
-    );
-  }
-
-  Widget buildItem(BuildContext context, ContactModel item) {
-    return Container(
-      color: Colors.white,
-      height: 44,
-      child: Text(item.name),
+    return SearchResults(
+      key: searchResultsKey,
+      onEmpty: _onEmptySearchResultTap,
     );
   }
 

@@ -38,6 +38,7 @@ class WidgetFactory{
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Icon(Icons.manage_search, color: Colors.grey, size: 50,),
+            const SizedBox(height: 10,),
             Text('noSearchResults'.tr, style: TextStyle(color: Colors.grey, fontSize: Helper.contentFontSize),)
           ],
         )

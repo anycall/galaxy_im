@@ -65,6 +65,7 @@ dependencies:
   flutter_svg: ^2.0.7
   implicitly_animated_reorderable_list_2: ^0.5.1
   lpinyin: ^2.0.3
+  easy_rich_text: ^2.0.0
 
 dev_dependencies:
   flutter_test:

@@ -697,7 +697,7 @@ class FloatingSearchBarState extends ImplicitlyAnimatedWidgetState<
                   EdgeInsets.only(top: padding.top, bottom: padding.bottom),
               alignment: Alignment.center,
               decoration: BoxDecoration(
-                color: transition.lerpBackgroundColor(),
+                color:transition.lerpBackgroundColor(),
                 border: Border.fromBorderSide(style.border),
                 borderRadius: borderRadius,
               ),
@@ -807,10 +807,10 @@ class FloatingSearchBarState extends ImplicitlyAnimatedWidgetState<
                     width: transition.lerpInnerWidth(),
                     child: textField,
                   ),
-                  Align(
-                    alignment: Alignment.bottomCenter,
-                    child: transition.buildDivider(),
-                  ),
+                  // Align(
+                  //   alignment: Alignment.bottomCenter,
+                  //   child: transition.buildDivider(),
+                  // ),
                 ],
               ),
             ),
