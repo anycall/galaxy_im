@@ -16,14 +16,14 @@ import 'package:lpinyin/lpinyin.dart';
 //搜索框高度 
 const double kSearchBarHeight = 50;
 
-class Contacts extends StatefulWidget {
-  const Contacts({super.key});
+class ContactsPage extends StatefulWidget {
+  const ContactsPage({super.key});
 
   @override
-  State<Contacts> createState() => _ContactsState();
+  State<ContactsPage> createState() => _ContactsPageState();
 }
 
-class _ContactsState extends State<Contacts> {
+class _ContactsPageState extends State<ContactsPage> {
   final ItemPositionsListener itemPositionsListener =
       ItemPositionsListener.create();
   final FloatingSearchBarController _searchBarController =
@@ -109,8 +109,8 @@ class _ContactsState extends State<Contacts> {
     _contactList.clear();
     for (int i = 0, length = list.length; i < length; i++) {
       User user = list[i];
-      String? firstName = user.firstName; // 可能为null的firstName
-      String? lastName = user.lastName; // 可能为null的lastName
+      String? firstName = user.firstName; 
+      String? lastName = user.lastName; 
       ContactModel contactModel = ContactModel(
           name: '${firstName ?? ''} ${lastName ?? ''}', user: user);
       String pinyin = PinyinHelper.getPinyinE(contactModel.name);
@@ -212,7 +212,7 @@ class _ContactsState extends State<Contacts> {
         FloatingSearchBarAction(
           showIfOpened: true,
           child: CircularButton(
-            icon: const Icon(Icons.search),
+            icon: const Icon(Icons.person_search),
             onPressed: () {},
           ),
         ),
@@ -246,7 +246,7 @@ class _ContactsState extends State<Contacts> {
         else if (index == 1){
           return TopCell(height: Helper.contentFontSize * 2 + 30, iconData: Icons.groups , title: model.name, isLast: index == _allList.length - 1 ? true : false);
         }
-        return UserCell(height: Helper.contentFontSize * 2 + 30, userId: model.user!.id, name: model.name, isLast: index == _allList.length - 1 ? true : false);
+        return UserCell(height: Helper.contentFontSize * 2 + 30, model: model, isLast: index == _allList.length - 1 ? true : false);
       },
       physics: const ClampingScrollPhysics(),
       susItemBuilder: (BuildContext context, int index) {

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:galaxy_im/Helper/RouteManager.dart';
 import 'package:galaxy_im/Pages/Chats/Chats.dart';
 import 'package:galaxy_im/Pages/Contacts/Contacts.dart';
-import 'package:galaxy_im/Pages/Me/me.dart';
+import 'package:galaxy_im/Pages/Me/Me.dart';
 import 'package:get/get.dart';
 import 'package:badges/badges.dart' as BDG;
 
@@ -21,8 +21,8 @@ class _HomePageState extends State<HomePage> with RestorationMixin {
 
   var pages = <Widget>[
     const Conversations(),
-    const Contacts(),
-    const Me(),
+    const ContactsPage(),
+    const MePage(),
   ];
 
   @override

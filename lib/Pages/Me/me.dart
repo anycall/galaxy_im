@@ -5,14 +5,14 @@ import 'package:galaxy_im/Pages/Widget/WidgetFactory.dart';
 import 'package:galaxy_im/Pages/Widget/random_avatar.dart';
 import 'package:get/get.dart';
 
-class Me extends StatefulWidget {
-  const Me({super.key});
+class MePage extends StatefulWidget {
+  const MePage({super.key});
 
   @override
-  State<Me> createState() => _MeState();
+  State<MePage> createState() => _MePageState();
 }
 
-class _MeState extends State<Me> {
+class _MePageState extends State<MePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

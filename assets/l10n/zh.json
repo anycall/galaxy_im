@@ -27,5 +27,8 @@
     "group": "群组",
     "search": "搜索",
     "contactsBottomTips": "关注了XXX人",
-    "noSearchResults": "没有找到符合条件的结果"
+    "noSearchResults": "没有找到符合条件的结果",
+    "sendChat": "发消息",
+    "subscribe": "订阅",
+    "unsubscribe": "取消订阅"
 }

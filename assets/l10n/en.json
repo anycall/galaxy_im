@@ -26,5 +26,9 @@
     "group": "Group",
     "search": "Search",
     "contactsBottomTips": "Followed XXX people",
-    "noSearchResults": "No matching results found"
+    "noSearchResults": "No matching results found",
+    "userProfile": "User profile",
+    "sendChat": "Chat",
+    "subscribe": "Subscribe",
+    "unsubscribe": "Unsubscribe"
 }

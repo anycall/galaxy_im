@@ -4,7 +4,6 @@ import 'package:galaxy_im/Helper/RouteManager.dart';
 import 'package:galaxy_im/Models/ContactModel.dart';
 import 'package:galaxy_im/Pages/Widget/WidgetFactory.dart';
 import 'package:galaxy_im/Pages/Widget/random_avatar.dart';
-import 'package:galaxy_im/Utils/LogUtil.dart';
 import 'package:get/get.dart';
 import 'package:implicitly_animated_reorderable_list_2/implicitly_animated_reorderable_list_2.dart';
 import 'package:implicitly_animated_reorderable_list_2/transitions.dart';
@@ -53,7 +52,7 @@ class TopCell extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Get.toNamed(Routes.font);
+        
       },
       child: Column(
         children: [
@@ -95,24 +94,26 @@ class TopCell extends StatelessWidget {
   }
 }
 
+//跳转到个人中心
+void _pushUserProfilePage(ContactModel model) {
+  Get.toNamed(Routes.userProfile, arguments: model.user);
+}
+
 class UserCell extends StatelessWidget {
   final double height;
-  final String userId;
-  final String name;
+  final ContactModel model;
   final bool isLast;
   const UserCell(
       {super.key,
       required this.height,
-      required this.userId,
-      required this.name,
+      required this.model,
       required this.isLast});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        LogUtil.debug('id: $userId');
-        //TODO: 跳转到个人中心
+        _pushUserProfilePage(model);
       },
       child: Column(
         children: [
@@ -122,14 +123,14 @@ class UserCell extends StatelessWidget {
             child: Row(
               children: [
                 RandomAvatar(
-                  userId,
+                  model.user!.id,
                   height: height - 15,
                   width: height - 15,
                 ),
                 const SizedBox(width: 15),
                 Expanded(
                   child: Text(
-                    name,
+                    model.name,
                     style: TextStyle(
                         fontSize: Helper.contentFontSize,
                         color: Helper.imSurface),
@@ -152,22 +153,19 @@ class UserCell extends StatelessWidget {
 
 class UserRichTextCell extends StatelessWidget {
   final double height;
-  final String userId;
-  final String name;
+  final ContactModel model;
   final String keywords;
   const UserRichTextCell(
       {super.key,
       required this.height,
-      required this.userId,
-      required this.name,
+      required this.model,
       required this.keywords});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        LogUtil.debug('id: $userId');
-        //TODO: 跳转到个人中心
+        _pushUserProfilePage(model);
       },
       child: Column(
         children: [
@@ -177,14 +175,14 @@ class UserRichTextCell extends StatelessWidget {
             child: Row(
               children: [
                 RandomAvatar(
-                  userId,
+                  model.user!.id,
                   height: height - 15,
                   width: height - 15,
                 ),
                 const SizedBox(width: 15),
                 Expanded(
                   child: EasyRichText(
-                    name,
+                    model.name,
                     caseSensitive: false,
                     defaultStyle: TextStyle(
                       fontSize: Helper.contentFontSize,
@@ -284,8 +282,7 @@ class SearchResultsState extends State<SearchResults> {
   Widget buildItem(BuildContext context, ContactModel item) {
     return UserRichTextCell(
         height: Helper.contentFontSize * 2 + 30,
-        userId: item.user!.id,
-        name: item.name,
+        model: item,
         keywords: _query);
   }
 }

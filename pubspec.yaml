@@ -66,6 +66,7 @@ dependencies:
   implicitly_animated_reorderable_list_2: ^0.5.1
   lpinyin: ^2.0.3
   easy_rich_text: ^2.0.0
+  animated_button: ^0.2.0
 
 dev_dependencies:
   flutter_test:

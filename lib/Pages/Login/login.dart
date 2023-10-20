@@ -170,7 +170,7 @@ class _LoginPageState extends State<LoginPage> with RestorationMixin {
                               _buildOutlineInputBorder(Helper.imSurface),
                           errorBorder: _buildOutlineInputBorder(
                               Helper.themeManager.currentColorScheme.error),
-                          icon: const Icon(Icons.lock),
+                          icon: const Icon(Icons.password),
                           suffixIcon: IconButton(
                             onPressed: () {
                               setState(() {
@@ -199,7 +199,7 @@ class _LoginPageState extends State<LoginPage> with RestorationMixin {
                   ) // your sub-tree that triggered the keyboard
                   ),
               RoundedLoadingButton(
-                width: 100.r,
+                width: 130.r,
                 color: Helper.imSurface,
                 elevation: 0,
                 borderRadius: 5.r,
@@ -207,11 +207,18 @@ class _LoginPageState extends State<LoginPage> with RestorationMixin {
                 valueColor: Helper.imPrimary,
                 controller: _btnController,
                 onPressed: _login,
-                child: Text('login'.tr,
-                    style: TextStyle(
-                        fontSize: Helper.subtitleFontSize,
-                        fontWeight: FontWeight.bold,
-                        color: Helper.imPrimary)),
+                child: Row(
+                  mainAxisSize:MainAxisSize.min,
+                  children: [
+                    Icon(Icons.login, size: 20, color: Helper.imPrimary),
+                    const SizedBox(width: 15),
+                    Text('login'.tr,
+                        style: TextStyle(
+                            fontSize: Helper.subtitleFontSize,
+                            fontWeight: FontWeight.bold,
+                            color: Helper.imPrimary)),
+                  ],
+                ),
               )
             ],
           ),
