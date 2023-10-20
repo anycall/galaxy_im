@@ -18,6 +18,7 @@ class _FontPageState extends State<FontPage> {
       backgroundColor: Theme.of(context).colorScheme.onPrimary,
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.onPrimary,
+        centerTitle: true,
         bottom: WidgetFactory.buildAppBarLine(),
         title: Text(
           'font'.tr,

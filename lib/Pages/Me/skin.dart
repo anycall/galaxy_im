@@ -19,6 +19,7 @@ class _SkinPageState extends State<SkinPage> {
         backgroundColor: Theme.of(context).colorScheme.onPrimary,
         bottom: WidgetFactory.buildAppBarLine(),
         title: Text('skin'.tr, style: TextStyle(fontSize: Helper.titleFontSize),),
+        centerTitle: true,
         leading: WidgetFactory.buildAppBarBackButton(context),
       ),
       body: Center(

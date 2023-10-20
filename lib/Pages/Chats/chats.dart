@@ -77,6 +77,7 @@ class _ConversationsState extends State<Conversations> {
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.onPrimary,
         scrolledUnderElevation: 0,
+        centerTitle: true,
         bottom: WidgetFactory.buildAppBarLine(),
         title: _buildTitle(),
       ),

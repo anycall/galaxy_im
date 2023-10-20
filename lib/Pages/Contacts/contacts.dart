@@ -150,6 +150,7 @@ class _ContactsPageState extends State<ContactsPage> {
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.onPrimary,
         scrolledUnderElevation: 0,
+        centerTitle: true,
         bottom: showAppBarLine ? WidgetFactory.buildAppBarLine() : null,
         title: Text(
           'contacts'.tr,

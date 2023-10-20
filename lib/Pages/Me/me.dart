@@ -19,6 +19,7 @@ class _MePageState extends State<MePage> {
       backgroundColor: Theme.of(context).colorScheme.onPrimary,
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.onPrimary,
+        centerTitle: true,
         bottom: WidgetFactory.buildAppBarLine(),
         title: Text(
           'me'.tr,

@@ -310,6 +310,7 @@ class _SingleChatPageState extends State<SingleChatPage> {
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.onPrimary,
         scrolledUnderElevation: 0,
+        centerTitle: true,
         bottom: WidgetFactory.buildAppBarLine(),
         title: Text('单聊'),
         leading: WidgetFactory.buildAppBarBackButton(context),

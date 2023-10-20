@@ -17,6 +17,7 @@ class _LanguagePageState extends State<LanguagePage> {
       backgroundColor: Theme.of(context).colorScheme.onPrimary,
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.onPrimary,
+        centerTitle: true,
         bottom: WidgetFactory.buildAppBarLine(),
         title: Text(
           'language'.tr,
