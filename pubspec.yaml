@@ -46,6 +46,7 @@ dependencies:
   logger: ^2.0.2
   uuid: ^4.0.0
   rounded_loading_button: ^2.1.0
+  random_avatar: ^0.0.8
   flutter_swipe_action_cell: ^3.1.2
   flutter_chat_ui: ^1.6.9
   flutter_chat_types: ^3.6.2
@@ -55,18 +56,6 @@ dependencies:
   http: ^1.1.0
   path_provider: ^2.1.1
   open_filex: ^4.3.2
-  bubble: ^1.2.1
-  #use drift
-  drift: ^2.8.1
-  sqlite3_flutter_libs: ^0.5.0
-  path: ^1.8.3
-  faker: ^2.1.0
-  crypto: ^3.0.3
-  flutter_svg: ^2.0.7
-  implicitly_animated_reorderable_list_2: ^0.5.1
-  lpinyin: ^2.0.3
-  easy_rich_text: ^2.0.0
-  animated_button: ^0.2.0
 
 dev_dependencies:
   flutter_test:
@@ -78,11 +67,6 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
-  #use drift
-  drift_dev: ^2.8.1
-  build_runner: ^2.4.6
-  build_web_compilers: ^4.0.0
-  build: ^2.2.1
 
 flutter_launcher_icons:
   android: "launcher_icon"
@@ -103,13 +87,12 @@ flutter_native_splash:
   image: assets/icon/splash.jpg
   android_gravity: center
   ios_content_mode: center
-android_12:
-  color: "#F2F2F2"
-  image: assets/icon/splash_android.jpg
+
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 # The following section is specific to Flutter packages.
 flutter:
+
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
@@ -117,7 +100,6 @@ flutter:
   assets:
     - assets/l10n/
     - assets/icon/
-    - assets/image/
     - assets/messages.json
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
