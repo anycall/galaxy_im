@@ -22,7 +22,6 @@
 
 import 'dart:convert';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:get/get.dart';
@@ -148,13 +147,6 @@ class ThemeManager extends GetxController {
 
       Get.changeTheme(ThemeData(
         colorScheme: colorScheme,
-        textSelectionTheme: TextSelectionThemeData(
-            selectionColor: Colors.grey,
-            cursorColor: colorScheme.onSurface,
-            selectionHandleColor: colorScheme.onSurface),
-        cupertinoOverrideTheme: CupertinoThemeData(
-          primaryColor: colorScheme.onSurface,
-        ),
         useMaterial3: true,
         splashColor: Colors.transparent,
         highlightColor: Colors.transparent,
@@ -171,13 +163,6 @@ class ThemeManager extends GetxController {
       }
       Get.changeTheme(ThemeData(
         colorScheme: currentColorScheme,
-        textSelectionTheme: TextSelectionThemeData(
-            selectionColor: Colors.grey,
-            cursorColor: currentColorScheme.onSurface,
-            selectionHandleColor: currentColorScheme.onSurface),
-        cupertinoOverrideTheme: CupertinoThemeData(
-          primaryColor: currentColorScheme.onSurface,
-        ),
         textTheme: TextTheme(
             labelMedium:
                 TextStyle(fontSize: currentFontSizeStyle.subtitleFontSize)),
@@ -191,14 +176,13 @@ class ThemeManager extends GetxController {
 
   DefaultChatTheme getChatTheme() {
     return DefaultChatTheme(
-      backgroundColor: currentColorScheme.brightness == Brightness.dark
-          ? currentColorScheme.onPrimary
-          : currentColorScheme.onSurface.withOpacity(0.1),
+      backgroundColor: currentColorScheme.brightness == Brightness.dark ? currentColorScheme.onPrimary : currentColorScheme.onSurface.withOpacity(0.1),
       inputBackgroundColor: currentColorScheme.onPrimary,
       //光标
+      inputTextCursorColor: currentColorScheme.onSurface,
       inputTextColor: currentColorScheme.onSurface,
       primaryColor: currentColorScheme.onSecondary,
-
+      
       userNameTextStyle: TextStyle(
         fontSize: currentFontSizeStyle.contentFontSize,
         fontWeight: FontWeight.bold,
@@ -206,20 +190,6 @@ class ThemeManager extends GetxController {
       inputBorderRadius: const BorderRadius.only(
         topLeft: Radius.circular(20),
         topRight: Radius.circular(20),
-      ),
-      inputTextDecoration: const InputDecoration(
-        enabledBorder: UnderlineInputBorder(
-          borderSide: BorderSide(
-            color: Colors.grey, 
-            width: 0.25, 
-          ),
-        ),
-        focusedBorder: UnderlineInputBorder(
-          borderSide: BorderSide(
-            color: Colors.grey, 
-            width: 0.25, 
-          ),
-        ),
       ),
       inputContainerDecoration: BoxDecoration(
         color: currentColorScheme.onPrimary,
@@ -235,70 +205,22 @@ class ThemeManager extends GetxController {
           ),
         ],
       ),
-      //信息style
-      sentMessageBodyTextStyle: TextStyle(
-        color: currentColorScheme.onPrimary,
-        fontSize: currentFontSizeStyle.contentFontSize,
-      ),
       receivedMessageBodyTextStyle: TextStyle(
         color: currentColorScheme.onSurface,
         fontSize: currentFontSizeStyle.contentFontSize,
       ),
-      //加粗信息style
-      sentMessageBodyBoldTextStyle: TextStyle(
-        color: currentColorScheme.onPrimary,
-        fontSize: currentFontSizeStyle.contentFontSize,
-        fontWeight: FontWeight.bold,
-      ),
-      receivedMessageBodyBoldTextStyle: TextStyle(
-        color: currentColorScheme.onSurface,
-        fontSize: currentFontSizeStyle.contentFontSize,
-        fontWeight: FontWeight.bold,
-      ),
-      //code信息style
-      sentMessageBodyCodeTextStyle: TextStyle(
+      sentMessageBodyTextStyle: TextStyle(
         color: currentColorScheme.onPrimary,
         fontSize: currentFontSizeStyle.contentFontSize,
       ),
-      receivedMessageBodyCodeTextStyle: TextStyle(
-        color: currentColorScheme.onSurface,
-        fontSize: currentFontSizeStyle.contentFontSize,
-      ),
-      //链接style
-      sentMessageBodyLinkTextStyle: TextStyle(
-        color: currentColorScheme.onPrimary,
-        fontSize: currentFontSizeStyle.contentFontSize,
-        decoration: TextDecoration.underline,
-        decorationColor: currentColorScheme.onPrimary,
-        decorationThickness: 0.5,
-      ),
-      receivedMessageBodyLinkTextStyle: TextStyle(
-        color: currentColorScheme.onSurface,
-        fontSize: currentFontSizeStyle.contentFontSize,
-        decoration: TextDecoration.underline,
-        decorationColor: currentColorScheme.onPrimary,
-        decorationThickness: 0.5,
-      ),
-      //链接预览title style
-      sentMessageLinkTitleTextStyle: TextStyle(
-        color: currentColorScheme.onPrimary,
-        fontSize: currentFontSizeStyle.subtitleFontSize,
-        fontWeight: FontWeight.bold,
-      ),
-      receivedMessageLinkTitleTextStyle: TextStyle(
-        color: currentColorScheme.onSurface,
-        fontSize: currentFontSizeStyle.subtitleFontSize,
-        fontWeight: FontWeight.bold,
-      ),
-      //链接预览content style
-      sentMessageLinkDescriptionTextStyle: TextStyle(
-        color: currentColorScheme.onPrimary,
-        fontSize: currentFontSizeStyle.contentFontSize,
-      ),
-      receivedMessageLinkDescriptionTextStyle: TextStyle(
-        color: currentColorScheme.onSurface,
-        fontSize: currentFontSizeStyle.contentFontSize,
-      ),
+      // sentMessageBodyLinkTextStyle: TextStyle(
+      //   color: currentColorScheme.onSurface,
+      //   fontSize: currentFontSizeStyle.contentFontSize,
+      // ),
+      // receivedMessageBodyCodeTextStyle: TextStyle(
+      //   color: currentColorScheme.onPrimary,
+      //   fontSize: currentFontSizeStyle.contentFontSize,
+      // ),
     );
   }
 
@@ -308,13 +230,6 @@ class ThemeManager extends GetxController {
     await saveFontSize(fontSize);
     Get.changeTheme(ThemeData(
       colorScheme: currentColorScheme,
-      textSelectionTheme: TextSelectionThemeData(
-          selectionColor: Colors.grey,
-          cursorColor: currentColorScheme.onSurface,
-          selectionHandleColor: currentColorScheme.onSurface),
-      cupertinoOverrideTheme: CupertinoThemeData(
-        primaryColor: currentColorScheme.onSurface,
-      ),
       textTheme: TextTheme(
           labelMedium:
               TextStyle(fontSize: currentFontSizeStyle.subtitleFontSize)),
