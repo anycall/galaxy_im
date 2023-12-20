@@ -6,17 +6,17 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
-import 'package:flutter_chat_types/flutter_chat_types.dart';
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:galaxy_im/Helper/Helper.dart';
 import 'package:galaxy_im/Pages/Widget/WidgetFactory.dart';
+import 'package:galaxy_im/Pages/Widget/random_avatar.dart';
+import 'package:galaxy_im/Utils/LogUtil.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mime/mime.dart';
 import 'package:open_filex/open_filex.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:random_avatar/random_avatar.dart';
 import 'package:uuid/uuid.dart';
 import 'package:http/http.dart' as http;
 
@@ -28,7 +28,13 @@ class SingleChatPage extends StatefulWidget {
 }
 
 class _SingleChatPageState extends State<SingleChatPage> {
-  final User _user = Get.arguments;
+  final types.Room _room = Get.arguments; //会话信息，等数据接入从里边获取下方的User或者给User赋值
+  final types.User _user = const types.User(
+    id: '82091008-a484-4a89-ae75-a22bf8d6f3ac', //model.id,
+      firstName: 'Galaxy', 
+      lastName: 'G',
+      imageUrl: '82091008-a484-4a89-ae75-a22bf8d6f3ac',
+  );
   final GlobalKey<ChatState> _singleChatKey = GlobalKey(); //用于跳转到未读
   List<types.Message> _messages = [];
   bool _isLastPage = false;
@@ -247,7 +253,7 @@ class _SingleChatPageState extends State<SingleChatPage> {
   }
 
   void _handleMessageStatusTap(BuildContext _, types.Message message) async {
-    print('Message status tapped: ${message.status}');
+    LogUtil.debug('Message status tapped: ${message.status}');
   }
 
   Widget _bubbleBuilder(
@@ -304,9 +310,10 @@ class _SingleChatPageState extends State<SingleChatPage> {
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.onPrimary,
         scrolledUnderElevation: 0,
-        bottom: WidgetFactory().buildAppBarLine(),
+        centerTitle: true,
+        bottom: WidgetFactory.buildAppBarLine(),
         title: Text('单聊'),
-        leading: WidgetFactory().buildAppBarBackButton(context),
+        leading: WidgetFactory.buildAppBarBackButton(context),
       ),
       body: Chat(
         key: _singleChatKey,

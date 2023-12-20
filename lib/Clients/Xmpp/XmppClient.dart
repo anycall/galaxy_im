@@ -4,13 +4,13 @@ import 'dart:io';
 import 'dart:math';
 import 'package:galaxy_im/Clients/IClientInterface.dart';
 import 'package:galaxy_im/Clients/Xmpp/Basic_XEP.dart';
-import 'package:galaxy_im/Clients/Xmpp/Xmpp_Types.dart';
+import 'package:galaxy_im/Clients/Xmpp/Handlers/XepMessageHandler.dart';
 import 'package:galaxy_im/Utils/Extensions.dart';
 import 'package:galaxy_im/Utils/LogUtil.dart';
 import 'package:get/get.dart';
 import 'package:xml/xml.dart';
 
-class XmppClient extends IClientInterface {
+class XmppClient extends IClientInterface with BasicXEP {
   late XmppLoginInfo _xmppLoginInfo;
   String get domain => _xmppLoginInfo.domain;
   late Socket _socket;
@@ -25,12 +25,12 @@ class XmppClient extends IClientInterface {
   late Completer<bool> _loginCompleter;
   List<XepMessageHandler> handlers = [];
   final List<XEP> _xeps = [];
+  late XEP_Login _xepLogin;
 
   XmppClient(XmppServerInfo serverInfo) : super(serverInfo) {
     var xmppServerInfo = serverInfo;
-    var xepLogin = XEP_Login(this);
-    _xeps.addAll([xepLogin]);
-
+    _xepLogin = XEP_Login(this);
+    _xeps.addAll([_xepLogin]);
     handlers.addAll(_xeps.mapMany((item) => item.receiveHandlers));
 
     //打印所有的过滤器的name属性
@@ -41,7 +41,7 @@ class XmppClient extends IClientInterface {
   @override
   Future<bool> login(BaseLoginInfo info) async {
     _xmppLoginInfo = info as XmppLoginInfo;
-    _loginCompleter = Completer();
+    // _loginCompleter = Completer();
     var r = Random();
     String key = base64.encode(List<int>.generate(8, (_) => r.nextInt(255)));
     HttpClient client = HttpClient(context: SecurityContext());
@@ -71,17 +71,9 @@ class XmppClient extends IClientInterface {
         onDone: () => {LogUtil.debug("onDone")});
 
     LogUtil.debug("ws.readystate:${_ws.readyState}");
-    var userName = _xmppLoginInfo.userName;
-    var password = _xmppLoginInfo.password;
-    var crential = "\u0000$userName@$domain\u0000$password";
 
-    var base64Str = base64.encode(utf8.encode(crential));
-    LogUtil.debug(crential);
-    var openStr =
-        "<open from='$userName@$domain' to='$domain' version='1.0' xmlns='urn:ietf:params:xml:ns:xmpp-framing'/>";
-    _sendXmppMessage(openStr);
-
-    return _loginCompleter.future;
+    return await _xepLogin.login();
+    // return _loginCompleter.future;
   }
 
   //直接使用websocket发送消息
@@ -91,13 +83,6 @@ class XmppClient extends IClientInterface {
   }
 
   void wsHandleInComingMessage(String message) {
-    // rawOutput(message, prefix: "ws");
-
-    if (message.startsWith("<success")) {
-      _loginCompleter.complete(true);
-    } else if (message.startsWith("<failure")) {
-      _loginCompleter.complete(false);
-    }
     var (parseResult, parseDoc) = XmlDocumentExtension.tryParse(message);
 
     if (parseResult) {
@@ -115,7 +100,7 @@ class XmppClient extends IClientInterface {
               .map((e) => e.getAttribute("xmlns"))
               .where((ns) => ns != null && ns.isNotEmpty) ??
           [];
-
+      var hitHandlerCount = 0;
       for (var handler in handlers) {
         if ((handler.ns.isEmpty || (xmlnsList.contains(handler.ns))) &&
             (handler.name.isEmpty || name == handler.name) &&
@@ -123,14 +108,23 @@ class XmppClient extends IClientInterface {
             (handler.from.isEmpty || from == handler.from) &&
             (handler.to.isEmpty || to == handler.to) &&
             (handler.type.isEmpty || type == handler.type)) {
-          LogUtil.debug("匹配上过滤器",
-              params: [xmlnsList, name, type, id, from, to, message]);
+          hitHandlerCount++;
+          LogUtil.debug("匹配上过滤器", params: [
+            "匹配顺序$hitHandlerCount",
+            name,
+            type,
+            id,
+            from,
+            to,
+            message
+          ]);
           handler.msgHandler(document!);
-        } else {
-          LogUtil.debug("没有匹配上过滤器",
-              params: [xmlnsList, name, type, id, from, to, message]);
-        }
+        } else {}
       }
+      if (hitHandlerCount == 0) {
+        LogUtil.debug("没有匹配上过滤器", params: [name, type, id, from, to, message]);
+      }
+      hitHandlerCount = 0;
     } else {
       //如果没有转换成功，则不行过滤
     }
