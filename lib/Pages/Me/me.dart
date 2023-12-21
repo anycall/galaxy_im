@@ -31,7 +31,7 @@ class _MePageState extends State<MePage> {
           children: [
             RandomAvatar(
               // DateTime.now().toIso8601String(),
-              'gaobo',
+              'galxy',
               height: 100,
               width: 100,
             ),
